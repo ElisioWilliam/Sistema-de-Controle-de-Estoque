@@ -8,10 +8,10 @@ public class Cliente {
     private String cpfCnpj;
 
     //construtor de cliente pra poder manipular o id
-    public Cliente(UUID id, String nomeCliente, String cpfCnpj) {
+    public Cliente(UUID id, String nomeCliente, String documento) {
         this.id = id;
         this.nomeCliente = nomeCliente;
-        this.cpfCnpj = cpfCnpj;
+        this.cpfCnpj = documento;
     }
 
     //construtor onde gera um id aleatorio unico

@@ -1,6 +1,8 @@
 package views;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import conexao.CriarBanco;
+import controller.BancoController; 
 
 public class Teste {
 
@@ -14,6 +16,8 @@ public class Teste {
 		        } else {
 		            System.out.println("Número inválido!");
 		        }
+		        
+		        BancoController bancoController = new BancoController();
 		    }
 
 		    public static boolean verificarCPF(String cpf) {

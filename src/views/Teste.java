@@ -17,7 +17,12 @@ public class Teste {
 		            System.out.println("Número inválido!");
 		        }
 		        
-		        BancoController bancoController = new BancoController();
+		        BancoController bancoController;
+		        
+		        
+		        bancoController = new BancoController();
+		        
+		        bancoController.createPessoaFisica(numero, numero);
 		    }
 
 		    public static boolean verificarCPF(String cpf) {

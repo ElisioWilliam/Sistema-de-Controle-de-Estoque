@@ -1,13 +1,17 @@
 package controller;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import conexao.CriarBanco;
 
+import java.util.ArrayList;
+import java.util.List;
+import models.*;
+
 public class BancoController {
 	private CriarBanco criarBanco;
-	private Statement statement;
 	
 	public BancoController(){
 		criarBanco = new CriarBanco();
@@ -16,7 +20,7 @@ public class BancoController {
 	//METODOS PARA CREATE
 	public void createPessoaFisica(String nome, String cpf) {
 	    try {
-	        statement = criarBanco.getConnection().createStatement();
+	        criarBanco.getConnection().createStatement();
 	        String insertDataSQL = "INSERT INTO pessoa_fisica (nome, cpf) VALUES (?, ?)";
 	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(insertDataSQL);
 	        preparedStatement.setString(1, nome);
@@ -28,7 +32,7 @@ public class BancoController {
 	}
 	public void createPessoaJuridica(String nome, String cnpj) {
 	    try {
-	        statement = criarBanco.getConnection().createStatement();
+	        criarBanco.getConnection().createStatement();
 	        String insertDataSQL = "INSERT INTO pessoa_juridica (nome, cnpj) VALUES (?, ?)";
 	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(insertDataSQL);
 	        preparedStatement.setString(1, nome);
@@ -40,7 +44,7 @@ public class BancoController {
 	}
 	public void createPedido(int id, int id_produto,int id_pessoa,int quantidade_produto,float valor_total) {
 	    try {
-	        statement = criarBanco.getConnection().createStatement();
+	        criarBanco.getConnection().createStatement();
 	        String insertDataSQL = "INSERT INTO pedido (id_produto, id_pessoa, quantidade_produto, valor_total) VALUES (?, ?, ?, ?)";
 	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(insertDataSQL);
 	        preparedStatement.setInt(1, id_produto);
@@ -54,7 +58,7 @@ public class BancoController {
 	}
 	public void createProduto(int id, String nome, int codigo, int quantidade, float preco) {
 	    try {
-	        statement = criarBanco.getConnection().createStatement();
+	        criarBanco.getConnection().createStatement();
 	        String insertDataSQL = "INSERT INTO produto (nome, codigo, quantidade, preco) VALUES (?, ?, ?, ?)";
 	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(insertDataSQL);
 	        preparedStatement.setString(1, nome);
@@ -169,4 +173,25 @@ public class BancoController {
 	    }
 	}
 
+	//MÉTODOS READ
+	public List<PessoaFisica> readPessoaFisica() {
+		List<PessoaFisica> pessoaFisicaList = new ArrayList<>();
+        try {
+            String selectDataSQL = "SELECT * FROM pessoa_fisica";
+            PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(selectDataSQL);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String nome = resultSet.getString("nome");
+                String cpf = resultSet.getString("cpf");
+                
+                PessoaFisica pessoaFisica = new PessoaFisica(id, nome, cpf);
+                pessoaFisicaList.add(pessoaFisica);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pessoaFisicaList;
+    }
 }

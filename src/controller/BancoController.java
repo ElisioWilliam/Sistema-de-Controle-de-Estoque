@@ -194,4 +194,68 @@ public class BancoController {
         }
         return pessoaFisicaList;
     }
+	public List<PessoaJuridica> readPessoaJuridica() {
+		List<PessoaJuridica> pessoaJuridicaList = new ArrayList<>();
+        try {
+            String selectDataSQL = "SELECT * FROM pessoa_juridica";
+            PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(selectDataSQL);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String nome = resultSet.getString("nome");
+                String cnpj = resultSet.getString("cnpj");
+                
+                PessoaJuridica pessoaJuridica = new PessoaJuridica(id, nome, cnpj);
+                pessoaJuridicaList.add(pessoaJuridica);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pessoaJuridicaList;
+    }
+	public List<Pedido> readPedido() {
+		List<Pedido> pedidoList = new ArrayList<>();
+        try {
+            String selectDataSQL = "SELECT * FROM pedido";
+            PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(selectDataSQL);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                int id_produto = resultSet.getInt("Produto");
+                int id_pessoa = resultSet.getInt("Pessoa");
+                int quantidade_produto = resultSet.getInt("Quantidade_Produto");
+                Float valor_total = resultSet.getFloat("Valor_Total");
+                
+                Pedido pedido = new Pedido(id, id_produto, id_pessoa, quantidade_produto, valor_total);
+                pedidoList.add(pedido);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pedidoList;
+    }
+	public List<Produto> readProduto() {
+		List<Produto> produtoList = new ArrayList<>();
+        try {
+            String selectDataSQL = "SELECT * FROM produto";
+            PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(selectDataSQL);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String nome = resultSet.getString("nome");
+                String codigo = resultSet.getString("codigo");
+                int quantidade = resultSet.getInt("Quantidade");
+                Float preco = resultSet.getFloat("preco");
+                
+                Produto produto = new Produto(id, nome, codigo, quantidade, preco);
+                produtoList.add(produto);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return produtoList;
+    }
 }

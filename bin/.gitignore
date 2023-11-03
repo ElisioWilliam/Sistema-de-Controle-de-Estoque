@@ -1,2 +1,4 @@
 /controller/
 /views/
+/models/
+../.settings/*

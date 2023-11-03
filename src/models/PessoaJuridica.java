@@ -1,7 +1,5 @@
 package models;
 
-import java.util.UUID;
-
 public class PessoaJuridica extends Cliente {
     private String cpnj;
 

@@ -14,6 +14,13 @@ public class Produto {
 	    this.quantidade = quantidade;
 	    this.preco = preco;
 	}
+	public Produto(String nome, String codigo, int quantidade, float preco){
+		this.id = id;
+	    this.nome = nome;
+	    this.codigo = codigo;
+	    this.quantidade = quantidade;
+	    this.preco = preco;
+	}
 	public int getId(){
 		   return id;
 		}

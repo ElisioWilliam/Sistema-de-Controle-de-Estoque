@@ -4,33 +4,27 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import conexao.CriarBanco;
-import controller.BancoController;
-import controller.PessoaController;
-import models.PessoaFisica; 
+import controller.*;
+import models.*; 
 
 public class Teste {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-        String numero = "12345678909"; // Substitua este valor com o CPF ou CNPJ que você deseja verificar
-        PessoaController pessoaController = new PessoaController();
-        if (pessoaController.verificarCPF(numero)) {
-            System.out.println("CPF válido!");
-        } else if (pessoaController.verificarCNPJ(numero)) {
-            System.out.println("CNPJ válido!");
-        } else {
-            System.out.println("Número inválido!");
-        }
+        BancoController bancoController = new BancoController();
+        ProdutoController produtoController = new ProdutoController();
+        PessoaFisicaController pessoaFisicaController = new PessoaFisicaController();
+        PessoaJuridicaController pessoaJuridicaController = new PessoaJuridicaController();
         
-        BancoController bancoController;
+        PessoaFisica pessoaF = new PessoaFisica("Joao Manuel Gomes", "638.821.740-05");
+        pessoaFisicaController.cadastrarPessoaFisica(pessoaF);    
         
-        bancoController = new BancoController();
-        
-        List<PessoaFisica> pessoaFisicaList = bancoController.readPessoaFisica();
-        for (PessoaFisica pessoaFisica : pessoaFisicaList) {
-            System.out.println("ID: " + pessoaFisica.getId());
-            System.out.println("Nome: " + pessoaFisica.getNomeCliente());
-            System.out.println("CPF: " + pessoaFisica.getCpf());
+        List<Produto> produtoList = bancoController.readProduto();
+        for (Produto produto : produtoList) {
+            System.out.println("ID: " + produto.getId());
+            System.out.println("Nome: " + produto.getNome());
+            System.out.println("Código: " + produto.getCodigo());
+            System.out.println("Quantidade: " + produto.getQuantidade());
+            System.out.println("Preço: " + produto.getPreco());
             System.out.println(); 
         }
 	}	

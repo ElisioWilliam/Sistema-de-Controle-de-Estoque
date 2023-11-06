@@ -3,9 +3,7 @@ package controller;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import conexao.CriarBanco;
-
 import java.util.ArrayList;
 import java.util.List;
 import models.*;
@@ -113,15 +111,27 @@ public class BancoController {
 	    }
 	}
 
-	protected void updateProduto(int id, String nome, int codigo, int quantidade, float preco) {
+	protected void updateProduto(int id, String nome, String codigo, int quantidade, float preco) {
 	    try {
 	        String updateDataSQL = "UPDATE produto SET nome = ?, codigo = ?, quantidade = ?, preco = ? WHERE id = ?";
 	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(updateDataSQL);
 	        preparedStatement.setString(1, nome);
-	        preparedStatement.setInt(2, codigo);
+	        preparedStatement.setString(2, codigo);
 	        preparedStatement.setInt(3, quantidade);
 	        preparedStatement.setFloat(4, preco);
 	        preparedStatement.setInt(5, id);
+	        preparedStatement.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	protected void updateQuantidadeProduto(int id, int quantidade) {
+	    try {
+	        String updateDataSQL = "UPDATE produto SET quantidade = ? WHERE id = ?";
+	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(updateDataSQL);
+	        preparedStatement.setInt(1, quantidade);
+	        preparedStatement.setInt(2, id);
 	        preparedStatement.executeUpdate();
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -261,7 +271,53 @@ public class BancoController {
 	    }
 	    return produtoList;
 	}
+	
+	protected Produto getProduto(int idPassado) {
+	    try {
+	        String selectDataSQL = "SELECT * FROM produto WHERE id = ?";
+	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(selectDataSQL);
+	        preparedStatement.setInt(1, idPassado);
+	        ResultSet resultSet = preparedStatement.executeQuery();
+	        
+	        while (resultSet.next()) {
+	            int id = resultSet.getInt("id");
+	            String nome = resultSet.getString("nome");
+	            String codigo = resultSet.getString("codigo");
+	            int quantidade = resultSet.getInt("quantidade");
+	            Float preco = resultSet.getFloat("preco");
+	            
+	            Produto produto = new Produto(id, nome, codigo, quantidade, preco);
+	            return produto;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
 
+	protected Produto getProduto(String codigoPassado) {
+	    try {
+	        String selectDataSQL = "SELECT * FROM produto WHERE codigo = ?";
+	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(selectDataSQL);
+	        preparedStatement.setString(1, codigoPassado);
+	        ResultSet resultSet = preparedStatement.executeQuery();
+	        
+	        while (resultSet.next()) {
+	            int id = resultSet.getInt("id");
+	            String nome = resultSet.getString("nome");
+	            String codigo = resultSet.getString("codigo");
+	            int quantidade = resultSet.getInt("quantidade");
+	            Float preco = resultSet.getFloat("preco");
+	            
+	            Produto produto = new Produto(id, nome, codigo, quantidade, preco);
+	            return produto;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
+	
 	//MÉTODOS PARA VERIFICAR SE VALOR JA EXISTE NO BANCO DE DADOS
 	protected boolean cpfExiste(String cpf) {
 	    try {

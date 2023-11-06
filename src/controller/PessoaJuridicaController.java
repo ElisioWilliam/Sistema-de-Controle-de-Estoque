@@ -17,7 +17,7 @@ public class PessoaJuridicaController {
 		pessoaJuridica.setCnpj(pessoaJuridica.getCnpj().replaceAll("[^0-9]", ""));
 		
 		if(pessoaJuridica.getNomeCliente() != "" && verificarCNPJ(pessoaJuridica.getCnpj())) {
-			if(!bancoController.cpfExiste(pessoaJuridica.getCnpj())) {
+			if(!bancoController.cnpjExiste(pessoaJuridica.getCnpj())) {
 				bancoController.createPessoaFisica(pessoaJuridica.getNomeCliente(), pessoaJuridica.getCnpj());
 				mensagem = "Pessoa Juridica cadastrada com sucesso!";
 				JOptionPane.showMessageDialog(null, mensagem);

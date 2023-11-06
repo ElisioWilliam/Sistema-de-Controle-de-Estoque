@@ -15,7 +15,6 @@ public class Produto {
 	    this.preco = preco;
 	}
 	public Produto(String nome, String codigo, int quantidade, float preco){
-		this.id = id;
 	    this.nome = nome;
 	    this.codigo = codigo;
 	    this.quantidade = quantidade;

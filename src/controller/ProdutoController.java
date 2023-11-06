@@ -1,6 +1,5 @@
 package controller;
 
-import controller.BancoController;
 import models.Produto; 
 import javax.swing.JOptionPane;
 
@@ -27,5 +26,15 @@ public class ProdutoController {
 			mensagem = "Dados inseridos incorretamente";
 			JOptionPane.showMessageDialog(null, mensagem);
 		}
+	}
+	
+	public void atualizarQuantidade(Produto produto, int quantidade) {
+		bancoController.updateQuantidadeProduto(produto.getId(),(produto.getQuantidade() - quantidade));
+	}
+	
+	public void atualizarQuantidade(int idProduto, int quantidade) {
+		Produto produto = bancoController.getProduto(idProduto);
+		
+		bancoController.updateQuantidadeProduto(produto.getId(),(produto.getQuantidade() + quantidade));
 	}
 }

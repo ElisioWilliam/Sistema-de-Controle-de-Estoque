@@ -1,6 +1,5 @@
 package controller;
 
-import controller.BancoController;
 import models.PessoaFisica;
 import javax.swing.JOptionPane;
 

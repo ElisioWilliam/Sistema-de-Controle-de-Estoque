@@ -31,6 +31,43 @@ public class PessoaJuridicaController {
 		}
 	}
 	
+	public void atualizarPessoaJuridica(PessoaJuridica pessoaJuridica) {
+		String mensagem = "";
+		pessoaJuridica.setCnpj(pessoaJuridica.getCnpj().replaceAll("[^0-9]", ""));
+		
+		if(pessoaJuridica.getNomeCliente() != "" && verificarCNPJ(pessoaJuridica.getCnpj())) {
+			if(bancoController.cnpjExiste(pessoaJuridica.getCnpj())) {
+				bancoController.updatePessoaJuridica(pessoaJuridica.getNomeCliente(), pessoaJuridica.getCnpj());
+				mensagem = "Pessoa Juridica atualizada com sucesso!";
+				JOptionPane.showMessageDialog(null, mensagem);
+			}else {
+				mensagem = "CNPJ indisponível!";
+				JOptionPane.showMessageDialog(null, mensagem);
+			}
+		}else {
+			mensagem = "Dados inseridos incorretamente";
+			JOptionPane.showMessageDialog(null, mensagem);
+		}
+	}
+	
+	public void deletarPessoaJuridica(String cnpj) {
+		String mensagem = "";
+		
+		if(verificarCNPJ(cnpj)) {
+			if(bancoController.cnpjExiste(cnpj)) {
+				bancoController.deletePessoaJuridica(cnpj);
+				mensagem = "Pessoa Juridica deletada com sucesso!";
+				JOptionPane.showMessageDialog(null, mensagem);
+			}else {
+				mensagem = "CNPJ indisponível!";
+				JOptionPane.showMessageDialog(null, mensagem);
+			}
+		}else {
+			mensagem = "Dados inseridos incorretamente";
+			JOptionPane.showMessageDialog(null, mensagem);
+		}
+	}
+	
 	public static boolean verificarCNPJ(String cnpj) {
 	    String regex = "^[0-9]{14}$";
 		if (!cnpj.matches(regex)) {

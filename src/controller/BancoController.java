@@ -74,13 +74,12 @@ public class BancoController {
     }
 	
 	//METODOS PARA UPDATE
-    protected void updatePessoaFisica(int id, String nome, String cpf) {
+    protected void updatePessoaFisica(String nome, String cpf) {
         try (Connection connection = criarBanco.getConnection()) {
-            String updateDataSQL = "UPDATE pessoa_fisica SET nome = ?, cpf = ? WHERE id = ?";
+            String updateDataSQL = "UPDATE pessoa_fisica SET nome = ? WHERE cpf = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(updateDataSQL)) {
                 preparedStatement.setString(1, nome);
                 preparedStatement.setString(2, cpf);
-                preparedStatement.setInt(3, id);
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -88,13 +87,12 @@ public class BancoController {
         }
     }
 
-    protected void updatePessoaJuridica(int id, String nome, String cnpj) {
+    protected void updatePessoaJuridica(String nome, String cnpj) {
         try (Connection connection = criarBanco.getConnection()) {
-            String updateDataSQL = "UPDATE pessoa_juridica SET nome = ?, cnpj = ? WHERE id = ?";
+            String updateDataSQL = "UPDATE pessoa_juridica SET nome = ? WHERE cnpj = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(updateDataSQL)) {
                 preparedStatement.setString(1, nome);
                 preparedStatement.setString(2, cnpj);
-                preparedStatement.setInt(3, id);
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -118,15 +116,14 @@ public class BancoController {
         }
     }
 
-    protected void updateProduto(int id, String nome, String codigo, int quantidade, float preco) {
+    protected void updateProduto(String nome, String codigo, int quantidade, float preco) {
         try (Connection connection = criarBanco.getConnection()) {
-            String updateDataSQL = "UPDATE produto SET nome = ?, codigo = ?, quantidade = ?, preco = ? WHERE id = ?";
+            String updateDataSQL = "UPDATE produto SET nome = ?, quantidade = ?, preco = ? WHERE codigo = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(updateDataSQL)) {
                 preparedStatement.setString(1, nome);
-                preparedStatement.setString(2, codigo);
-                preparedStatement.setInt(3, quantidade);
-                preparedStatement.setFloat(4, preco);
-                preparedStatement.setInt(5, id);
+                preparedStatement.setInt(2, quantidade);
+                preparedStatement.setFloat(3, preco);
+                preparedStatement.setString(4, codigo);
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -148,22 +145,22 @@ public class BancoController {
     }
 
 	//METODOS PARA DELETE
-	protected void deletePessoaFisica(int id) {
+	protected void deletePessoaFisica(String cpf) {
 	    try {
-	        String deleteDataSQL = "DELETE FROM pessoa_fisica WHERE id = ?";
+	        String deleteDataSQL = "DELETE FROM pessoa_fisica WHERE cpf = ?";
 	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(deleteDataSQL);
-	        preparedStatement.setInt(1, id);
+	        preparedStatement.setString(1, cpf);
 	        preparedStatement.executeUpdate();
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
 	}
 
-	protected void deletePessoaJuridica(int id) {
+	protected void deletePessoaJuridica(String cpf) {
 	    try {
-	        String deleteDataSQL = "DELETE FROM pessoa_juridica WHERE id = ?";
+	        String deleteDataSQL = "DELETE FROM pessoa_juridica WHERE cpf = ?";
 	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(deleteDataSQL);
-	        preparedStatement.setInt(1, id);
+	        preparedStatement.setString(1, cpf);
 	        preparedStatement.executeUpdate();
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -181,11 +178,11 @@ public class BancoController {
 	    }
 	}
 
-	protected void deleteProduto(int id) {
+	protected void deleteProduto(String codigo) {
 	    try {
-	        String deleteDataSQL = "DELETE FROM produto WHERE id = ?";
+	        String deleteDataSQL = "DELETE FROM produto WHERE codigo = ?";
 	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(deleteDataSQL);
-	        preparedStatement.setInt(1, id);
+	        preparedStatement.setString(1, codigo);
 	        preparedStatement.executeUpdate();
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -332,6 +329,30 @@ public class BancoController {
 	    return null;
 	}
 	
+	protected Pedido getPedido(int idPassado) {
+	    try (Connection connection = criarBanco.getConnection()) {
+	        String selectDataSQL = "SELECT * FROM pedido WHERE id = ?";
+	        try (PreparedStatement preparedStatement = connection.prepareStatement(selectDataSQL)) {
+	            preparedStatement.setInt(1, idPassado);
+	            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	                while (resultSet.next()) {
+	                    int id = resultSet.getInt("id");
+	                    String documento = resultSet.getString("documento_pessoa");
+	                    String codigo = resultSet.getString("codigo_produto");
+	                    int quantidade = resultSet.getInt("quantidade_produto");
+	                    Float preco = resultSet.getFloat("valor_total");
+
+	                    Pedido pedido= new Pedido(id, codigo, documento, quantidade, preco);
+	                    return pedido;
+	                }
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
+	
 	//MÉTODOS PARA VERIFICAR SE VALOR JA EXISTE NO BANCO DE DADOS
 	protected boolean cpfExiste(String cpf) {
 	    try (Connection connection = criarBanco.getConnection()) {
@@ -390,6 +411,24 @@ public class BancoController {
 	protected boolean produtoExiste(int id) {
 	    try (Connection connection = criarBanco.getConnection()) {
 	        String checkCodigoSQL = "SELECT COUNT(*) FROM produto WHERE id = ?";
+	        try (PreparedStatement preparedStatement = connection.prepareStatement(checkCodigoSQL)) {
+	            preparedStatement.setInt(1, id);
+	            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	                if (resultSet.next()) {
+	                    int count = resultSet.getInt(1);
+	                    return count > 0;
+	                }
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
+	
+	protected boolean pedidoExiste(int id) {
+	    try (Connection connection = criarBanco.getConnection()) {
+	        String checkCodigoSQL = "SELECT COUNT(*) FROM pedido WHERE id = ?";
 	        try (PreparedStatement preparedStatement = connection.prepareStatement(checkCodigoSQL)) {
 	            preparedStatement.setInt(1, id);
 	            try (ResultSet resultSet = preparedStatement.executeQuery()) {

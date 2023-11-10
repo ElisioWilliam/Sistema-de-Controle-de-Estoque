@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class ClienteListPanel extends JPanel {
+	private JList<JPanel> clienteList;
+	
     public ClienteListPanel() {
         carregarDadosClientes();
     }
@@ -22,62 +24,66 @@ public class ClienteListPanel extends JPanel {
         
         DefaultListModel<JPanel> listModel = new DefaultListModel<>();
         for (PessoaFisica pessoa : pessoaFisicaList) {
-            JPanel panel = new JPanel(new GridLayout(1, 4)); // 3 colunas: ID, Nome, Botão
-            String pessoaInfo = String.valueOf(pessoa.getCpf());
-            JLabel cpfLabel = new JLabel(pessoaInfo);
-            JLabel nomeLabel = new JLabel(pessoa.getNomeCliente());
-            JLabel categoriaLabel = new JLabel("Fisica");
-            JButton button = new JButton("Atualizar");
-
-            // Adicione um ActionListener ao botão, se necessário
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Lógica quando o botão é clicado
-                    // Pode ser abrir uma nova janela, editar a pessoa, etc.
-                }
-            });
-
-            panel.add(cpfLabel);
-            panel.add(nomeLabel);
-            panel.add(categoriaLabel);
-            panel.add(button);
-
+            JPanel panel = criarPainelCliente(pessoa.getCpf(), pessoa.getNomeCliente(), "Fisica");
             listModel.addElement(panel);
         }
         
         for (PessoaJuridica pessoa : pessoaJuridicaList) {
-            JPanel panel = new JPanel(new GridLayout(1, 4)); // 3 colunas: ID, Nome, Botão
-            String pessoaInfo = String.valueOf(pessoa.getCnpj());
-            JLabel cnpjLabel = new JLabel(pessoaInfo);
-            JLabel nomeLabel = new JLabel(pessoa.getNomeCliente());
-            String categoria = "Juridica";
-            JLabel categoriaLabel = new JLabel(categoria);
-            JButton button = new JButton("Atualizar");
-
-            // Adicione um ActionListener ao botão, se necessário
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Lógica quando o botão é clicado
-                    // Pode ser abrir uma nova janela, editar a pessoa, etc.
-                }
-            });
-
-            panel.add(cnpjLabel);
-            panel.add(nomeLabel);
-            panel.add(categoriaLabel);
-            panel.add(button);
-
+            JPanel panel = criarPainelCliente(pessoa.getCnpj(), pessoa.getNomeCliente(), "Juridica");
             listModel.addElement(panel);
         }
-
-        JList<JPanel> clienteList = new JList<>(listModel);
+        
+        clienteList = new JList<>(listModel); // Agora é uma variável de instância
         clienteList.setCellRenderer(new PanelListCellRenderer());
         JScrollPane scrollPane = new JScrollPane(clienteList);
 
+        // Adicionar três botões antes da lista de clientes
+        JButton botaoCadastrar = new JButton("CADASTRAR");
+        JButton botaoAtualizar = new JButton("ATUALIZAR");
+        JButton botaoDeletar = new JButton("DELETAR");
+
+        botaoCadastrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	new ClienteCadastrarDialog();
+            }
+        });
+        
+        botaoAtualizar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	new ClienteAtualizarDialog();
+            }
+        });
+        
+        botaoDeletar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	new ClienteDeletarDialog();
+            }
+        });
+        
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.add(botaoCadastrar);
+        botoesPanel.add(botaoAtualizar);
+        botoesPanel.add(botaoDeletar);
+
         setLayout(new BorderLayout());
+        add(botoesPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
+    }
+
+    private JPanel criarPainelCliente(String info, String nome, String categoria) {
+        JPanel panel = new JPanel(new GridLayout(1, 3));
+        JLabel infoLabel = new JLabel(info);
+        JLabel nomeLabel = new JLabel(nome);
+        JLabel categoriaLabel = new JLabel(categoria);
+        
+        panel.add(infoLabel);
+        panel.add(nomeLabel);
+        panel.add(categoriaLabel);
+        
+        return panel;
     }
 
     // Classe para personalizar a renderização do JPanel na JList
@@ -89,4 +95,3 @@ public class ClienteListPanel extends JPanel {
         }
     }
 }
-

@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class PedidoListPanel extends JPanel {
+    private JList<JPanel> pedidoJList;
+
     public PedidoListPanel() {
         carregarDadosPedidos();
     }
@@ -23,11 +25,42 @@ public class PedidoListPanel extends JPanel {
             listModel.addElement(panel);
         }
 
-        JList<JPanel> pedidoJList = new JList<>(listModel);
+        pedidoJList = new JList<>(listModel);
         pedidoJList.setCellRenderer(new PanelListCellRenderer());
         JScrollPane scrollPane = new JScrollPane(pedidoJList);
 
+        JButton botaoCadastrar = new JButton("CADASTRAR");
+        JButton botaoAtualizar = new JButton("ATUALIZAR");
+        JButton botaoDeletar = new JButton("DELETAR");
+
+        botaoCadastrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	new PedidoCadastrarDialog();
+            }
+        });
+
+        botaoAtualizar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	new PedidoAtualizarDialog();
+            }
+        });
+
+        botaoDeletar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	new PedidoDeletarDialog();
+            }
+        });
+
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.add(botaoCadastrar);
+        botoesPanel.add(botaoAtualizar);
+        botoesPanel.add(botaoDeletar);
+
         setLayout(new BorderLayout());
+        add(botoesPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
     }
 
@@ -44,23 +77,11 @@ public class PedidoListPanel extends JPanel {
         JLabel precoLabel = new JLabel(preco);
         JLabel quantidadeLabel = new JLabel(quantidade);
 
-        JButton button = new JButton("Atualizar");
-
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Lógica para atualizar o pedido
-                // Pode envolver a abertura de uma nova janela de atualização, por exemplo.
-                // Certifique-se de adicionar essa lógica conforme necessário.
-            }
-        });
-
         panel.add(idLabel);
         panel.add(codigoLabel);
         panel.add(documentoLabel);
         panel.add(precoLabel);
         panel.add(quantidadeLabel);
-        panel.add(button);
 
         return panel;
     }

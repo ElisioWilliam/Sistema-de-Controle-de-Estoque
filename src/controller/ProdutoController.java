@@ -12,8 +12,7 @@ public class ProdutoController {
 	
 	public void cadastrarProduto(Produto produto) {
 		String mensagem = "";
-		
-		if(produto.getCodigo() != "" && produto.getNome() != "" && produto.getPreco()> 0 && produto.getQuantidade() > 0) {
+		if(produto.getCodigo() != null && produto.getNome() != null && produto.getPreco()> 0 && produto.getQuantidade() > 0) {
 			if(!bancoController.codigoExiste(produto.getCodigo())) {
 				bancoController.createProduto(produto.getNome(), produto.getCodigo(), produto.getQuantidade(), produto.getPreco());
 				mensagem = "Produto cadastrado com sucesso!";
@@ -28,6 +27,36 @@ public class ProdutoController {
 		}
 	}
 	
+	public void atualizarProduto(Produto produto) {
+		String mensagem = "";
+		if(produto.getCodigo() != null && produto.getNome() != null && produto.getPreco()> 0 && produto.getQuantidade() > 0) {
+			if(bancoController.codigoExiste(produto.getCodigo())) {
+				bancoController.updateProduto(produto.getNome(), produto.getCodigo(), produto.getQuantidade(), produto.getPreco());
+				mensagem = "Produto atualizado com sucesso!";
+				JOptionPane.showMessageDialog(null, mensagem);
+			}else {
+				mensagem = "Código indisponível!";
+				JOptionPane.showMessageDialog(null, mensagem);
+			}
+		}else {
+			mensagem = "Dados inseridos incorretamente";
+			JOptionPane.showMessageDialog(null, mensagem);
+		}
+	}
+	
+	public void deletarProduto(String codigo) {
+		String mensagem = "";
+
+		if(bancoController.codigoExiste(codigo)) {
+			bancoController.deleteProduto(codigo);
+			mensagem = "Produto deletado com sucesso!";
+			JOptionPane.showMessageDialog(null, mensagem);
+		}else {
+			mensagem = "Código indisponível!";
+			JOptionPane.showMessageDialog(null, mensagem);
+		}
+	}
+	
 	public void atualizarQuantidade(Produto produto, int quantidade) {
 		bancoController.updateQuantidadeProduto(produto.getId(),(produto.getQuantidade() - quantidade));
 	}
@@ -36,5 +65,9 @@ public class ProdutoController {
 		Produto produto = bancoController.getProduto(codigoProduto);
 		
 		bancoController.updateQuantidadeProduto(produto.getId(),(produto.getQuantidade() + quantidade));
+	}
+	
+	public void definirQuantidade(Produto produto, int quantidade) {
+		bancoController.updateQuantidadeProduto(produto.getId(), quantidade);
 	}
 }

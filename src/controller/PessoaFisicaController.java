@@ -30,6 +30,45 @@ public class PessoaFisicaController {
 		}
 	}
 	
+	public void atualizarPessoaFisica(PessoaFisica pessoaFisica) {
+		String mensagem = "";
+		pessoaFisica.setCpf(pessoaFisica.getCpf().replaceAll("[^0-9]", ""));
+		
+		if(pessoaFisica.getNomeCliente() != "" && verificarCPF(pessoaFisica.getCpf())) {
+			if(bancoController.cpfExiste(pessoaFisica.getCpf())) {
+				bancoController.updatePessoaFisica(pessoaFisica.getNomeCliente(), pessoaFisica.getCpf());
+				
+				mensagem = "Pessoa Fisica atualizada com sucesso!";
+				JOptionPane.showMessageDialog(null, mensagem);
+			}else {
+				mensagem = "CPF indisponível!";
+				JOptionPane.showMessageDialog(null, mensagem);
+			}
+		}else {
+			mensagem = "Dados inseridos incorretamente";
+			JOptionPane.showMessageDialog(null, mensagem);
+		}
+	}
+	
+	public void deletarPessoaFisica(String cpf) {
+		String mensagem = "";
+		
+		if(verificarCPF(cpf)) {
+			if(bancoController.cpfExiste(cpf)) {
+				bancoController.deletePessoaFisica(cpf);
+				
+				mensagem = "Pessoa Fisica deletada com sucesso!";
+				JOptionPane.showMessageDialog(null, mensagem);
+			}else {
+				mensagem = "CPF indisponível!";
+				JOptionPane.showMessageDialog(null, mensagem);
+			}
+		}else {
+			mensagem = "Dados inseridos incorretamente";
+			JOptionPane.showMessageDialog(null, mensagem);
+		}
+	}
+	
 	public static boolean verificarCPF(String cpf) {
         String regex = "^[0-9]{11}$";
 		if (!cpf.matches(regex)) {

@@ -13,11 +13,16 @@ public class PedidoController {
 	
 	public void cadastrarPedido(String documento, Produto produto, int quantidade) {
 		String mensagem = "";
-		if((bancoController.cpfExiste(documento) || bancoController.cnpjExiste(documento)) && bancoController.produtoExiste(produto.getId()) && produto.getQuantidade()>= quantidade) {
+		
+		boolean cpfExiste = bancoController.cpfExiste(documento);
+		boolean cnpjExiste = bancoController.cnpjExiste(documento);
+		boolean produtoExiste = bancoController.produtoExiste(produto.getId());
+		
+		if((cpfExiste || cnpjExiste) && produtoExiste && produto.getQuantidade()>= quantidade) {
 			
-			Pedido pedido = new Pedido(produto.getId(), documento, quantidade, (quantidade * produto.getPreco()));
+			Pedido pedido = new Pedido(produto.getCodigo(), documento, quantidade, (float) quantidade * produto.getPreco());
 			
-			bancoController.createPedido(pedido.getIdProduto(), pedido.getDocumentoPessoa(), pedido.getQuantidadeProduto(), pedido.getValorTotal());
+			bancoController.createPedido(pedido.getCodigoProduto(), pedido.getDocumentoPessoa(), pedido.getQuantidadeProduto(), pedido.getValorTotal());
 			
 			ProdutoController produtoController = new ProdutoController();
 			produtoController.atualizarQuantidade(produto, quantidade);
@@ -31,24 +36,10 @@ public class PedidoController {
 	}
 	
 	public void cadastrarPedido(String documento, String codigo, int quantidade) {
-		String mensagem = "";
 		Produto produto = bancoController.getProduto(codigo);
+		System.out.println(produto.getCodigo());
 		
-		if((bancoController.cpfExiste(documento) || bancoController.cnpjExiste(documento)) && bancoController.produtoExiste(produto.getId()) && produto.getQuantidade()>= quantidade) {
-			
-			Pedido pedido = new Pedido(produto.getId(), documento, quantidade, (quantidade * produto.getPreco()));
-			
-			bancoController.createPedido(pedido.getIdProduto(), pedido.getDocumentoPessoa(), pedido.getQuantidadeProduto(), pedido.getValorTotal());
-			
-			ProdutoController produtoController = new ProdutoController();
-			produtoController.atualizarQuantidade(produto, quantidade);
-			
-			mensagem = "Pedido realizado com sucesso!";
-			JOptionPane.showMessageDialog(null, mensagem);
-		}else {
-			mensagem = "Dados inseridos incorretamente";
-			JOptionPane.showMessageDialog(null, mensagem);
-		}
+		cadastrarPedido(documento, produto, quantidade);
 	}
 	
 	public void cancelarPedido(Pedido pedido) {
@@ -57,7 +48,7 @@ public class PedidoController {
 		bancoController.deletePedido(pedido.getId());
 		
 		ProdutoController produtoController = new ProdutoController();
-		produtoController.atualizarQuantidade(pedido.getIdProduto(), pedido.getQuantidadeProduto());
+		produtoController.atualizarQuantidade(pedido.getCodigoProduto(), pedido.getQuantidadeProduto());
 		
 		mensagem = "Pedido realizado com sucesso!";
 		JOptionPane.showMessageDialog(null, mensagem);		

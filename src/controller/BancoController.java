@@ -1,5 +1,7 @@
 package controller;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,134 +11,141 @@ import java.util.List;
 import models.*;
 
 public class BancoController {
-	private CriarBanco criarBanco;
-	
-	public BancoController(){
-		criarBanco = new CriarBanco();
-	}
-	
-	//METODOS PARA CREATE
-	protected void createPessoaFisica(String nome, String cpf) {
-	    try {
-	        criarBanco.getConnection().createStatement();
-	        String insertDataSQL = "INSERT INTO pessoa_fisica (nome, cpf) VALUES (?, ?)";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(insertDataSQL);
-	        preparedStatement.setString(1, nome);
-	        preparedStatement.setString(2, cpf);
-	        preparedStatement.executeUpdate();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
-	protected void createPessoaJuridica(String nome, String cnpj) {
-	    try {
-	        criarBanco.getConnection().createStatement();
-	        String insertDataSQL = "INSERT INTO pessoa_juridica (nome, cnpj) VALUES (?, ?)";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(insertDataSQL);
-	        preparedStatement.setString(1, nome);
-	        preparedStatement.setString(2, cnpj);
-	        preparedStatement.executeUpdate();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
-	protected void createPedido(int id_produto, String documento_pessoa,int quantidade_produto,float valor_total) {
-	    try {
-	        criarBanco.getConnection().createStatement();
-	        String insertDataSQL = "INSERT INTO pedido (id_produto, id_pessoa, quantidade_produto, valor_total) VALUES (?, ?, ?, ?)";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(insertDataSQL);
-	        preparedStatement.setInt(1, id_produto);
-	        preparedStatement.setString(2, documento_pessoa);
-	        preparedStatement.setInt(3, quantidade_produto);
-	        preparedStatement.setFloat(4, valor_total);
-	        preparedStatement.executeUpdate();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
-	protected void createProduto(String nome, String codigo, int quantidade, float preco) {
-	    try {
-	        criarBanco.getConnection().createStatement();
-	        String insertDataSQL = "INSERT INTO produto (nome, codigo, quantidade, preco) VALUES (?, ?, ?, ?)";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(insertDataSQL);
-	        preparedStatement.setString(1, nome);
-	        preparedStatement.setString(2, codigo);
-	        preparedStatement.setInt(3, quantidade);
-	        preparedStatement.setFloat(4, preco);
-	        preparedStatement.executeUpdate();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
+    private CriarBanco criarBanco;
+
+    public BancoController() {
+        criarBanco = new CriarBanco();
+    }
+
+    // METODOS PARA CREATE
+    protected void createPessoaFisica(String nome, String cpf) {
+        try (Connection connection = criarBanco.getConnection()) {
+            String insertDataSQL = "INSERT INTO pessoa_fisica (nome, cpf) VALUES (?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertDataSQL)) {
+                preparedStatement.setString(1, nome);
+                preparedStatement.setString(2, cpf);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    protected void createPessoaJuridica(String nome, String cnpj) {
+        try (Connection connection = criarBanco.getConnection()) {
+            String insertDataSQL = "INSERT INTO pessoa_juridica (nome, cnpj) VALUES (?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertDataSQL)) {
+                preparedStatement.setString(1, nome);
+                preparedStatement.setString(2, cnpj);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createPedido(String codigo_produto, String documento_pessoa, int quantidade_produto, float valor_total) {
+        try (Connection connection = criarBanco.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO pedido (codigo_produto, documento_pessoa, quantidade_produto, valor_total) VALUES (?, ?, ?, ?)")) {
+
+            preparedStatement.setString(1, codigo_produto);
+            preparedStatement.setString(2, documento_pessoa);
+            preparedStatement.setInt(3, quantidade_produto);
+            preparedStatement.setFloat(4, valor_total);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Ou lançar uma exceção personalizada ou adicionar uma mensagem de log
+        }
+    }
+
+    protected void createProduto(String nome, String codigo, int quantidade, float preco) {
+        try (Connection connection = criarBanco.getConnection()) {
+            String insertDataSQL = "INSERT INTO produto (nome, codigo, quantidade, preco) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertDataSQL)) {
+                preparedStatement.setString(1, nome);
+                preparedStatement.setString(2, codigo);
+                preparedStatement.setInt(3, quantidade);
+                preparedStatement.setFloat(4, preco);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 	
 	//METODOS PARA UPDATE
-	protected void updatePessoaFisica(int id, String nome, String cpf) {
-	    try {
-	        String updateDataSQL = "UPDATE pessoa_fisica SET nome = ?, cpf = ? WHERE id = ?";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(updateDataSQL);
-	        preparedStatement.setString(1, nome);
-	        preparedStatement.setString(2, cpf);
-	        preparedStatement.setInt(3, id);
-	        preparedStatement.executeUpdate();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
+    protected void updatePessoaFisica(int id, String nome, String cpf) {
+        try (Connection connection = criarBanco.getConnection()) {
+            String updateDataSQL = "UPDATE pessoa_fisica SET nome = ?, cpf = ? WHERE id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(updateDataSQL)) {
+                preparedStatement.setString(1, nome);
+                preparedStatement.setString(2, cpf);
+                preparedStatement.setInt(3, id);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-	protected void updatePessoaJuridica(int id, String nome, String cnpj) {
-	    try {
-	        String updateDataSQL = "UPDATE pessoa_juridica SET nome = ?, cnpj = ? WHERE id = ?";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(updateDataSQL);
-	        preparedStatement.setString(1, nome);
-	        preparedStatement.setString(2, cnpj);
-	        preparedStatement.setInt(3, id);
-	        preparedStatement.executeUpdate();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
+    protected void updatePessoaJuridica(int id, String nome, String cnpj) {
+        try (Connection connection = criarBanco.getConnection()) {
+            String updateDataSQL = "UPDATE pessoa_juridica SET nome = ?, cnpj = ? WHERE id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(updateDataSQL)) {
+                preparedStatement.setString(1, nome);
+                preparedStatement.setString(2, cnpj);
+                preparedStatement.setInt(3, id);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-	protected void updatePedido(int id, int id_produto, String documento_pessoa, int quantidade_produto, float valor_total) {
-	    try {
-	        String updateDataSQL = "UPDATE pedido SET id_produto = ?, documento_pessoa = ?, quantidade_produto = ?, valor_total = ? WHERE id = ?";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(updateDataSQL);
-	        preparedStatement.setInt(1, id_produto);
-	        preparedStatement.setString(2, documento_pessoa);
-	        preparedStatement.setInt(3, quantidade_produto);
-	        preparedStatement.setFloat(4, valor_total);
-	        preparedStatement.setInt(5, id);
-	        preparedStatement.executeUpdate();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
+    protected void updatePedido(int id, String codigo_produto, String documento_pessoa, int quantidade_produto, float valor_total) {
+        try (Connection connection = criarBanco.getConnection()) {
+            String updateDataSQL = "UPDATE pedido SET codigo_produto = ?, documento_pessoa = ?, quantidade_produto = ?, valor_total = ? WHERE id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(updateDataSQL)) {
+                preparedStatement.setString(1, codigo_produto);
+                preparedStatement.setString(2, documento_pessoa);
+                preparedStatement.setInt(3, quantidade_produto);
+                preparedStatement.setFloat(4, valor_total);
+                preparedStatement.setInt(5, id);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-	protected void updateProduto(int id, String nome, String codigo, int quantidade, float preco) {
-	    try {
-	        String updateDataSQL = "UPDATE produto SET nome = ?, codigo = ?, quantidade = ?, preco = ? WHERE id = ?";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(updateDataSQL);
-	        preparedStatement.setString(1, nome);
-	        preparedStatement.setString(2, codigo);
-	        preparedStatement.setInt(3, quantidade);
-	        preparedStatement.setFloat(4, preco);
-	        preparedStatement.setInt(5, id);
-	        preparedStatement.executeUpdate();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
-	
-	protected void updateQuantidadeProduto(int id, int quantidade) {
-	    try {
-	        String updateDataSQL = "UPDATE produto SET quantidade = ? WHERE id = ?";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(updateDataSQL);
-	        preparedStatement.setInt(1, quantidade);
-	        preparedStatement.setInt(2, id);
-	        preparedStatement.executeUpdate();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
+    protected void updateProduto(int id, String nome, String codigo, int quantidade, float preco) {
+        try (Connection connection = criarBanco.getConnection()) {
+            String updateDataSQL = "UPDATE produto SET nome = ?, codigo = ?, quantidade = ?, preco = ? WHERE id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(updateDataSQL)) {
+                preparedStatement.setString(1, nome);
+                preparedStatement.setString(2, codigo);
+                preparedStatement.setInt(3, quantidade);
+                preparedStatement.setFloat(4, preco);
+                preparedStatement.setInt(5, id);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void updateQuantidadeProduto(int id, int quantidade) {
+        try (Connection connection = criarBanco.getConnection()) {
+            String updateDataSQL = "UPDATE produto SET quantidade = ? WHERE id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(updateDataSQL)) {
+                preparedStatement.setInt(1, quantidade);
+                preparedStatement.setInt(2, id);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 	//METODOS PARA DELETE
 	protected void deletePessoaFisica(int id) {
@@ -185,40 +194,42 @@ public class BancoController {
 
 	//MÉTODOS READ
 	public List<PessoaFisica> readPessoaFisica() {
-		List<PessoaFisica> pessoaFisicaList = new ArrayList<>();
-        try {
-            String selectDataSQL = "SELECT * FROM pessoa_fisica";
-            PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(selectDataSQL);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String nome = resultSet.getString("nome");
-                String cpf = resultSet.getString("cpf");
-                
-                PessoaFisica pessoaFisica = new PessoaFisica(id, nome, cpf);
-                pessoaFisicaList.add(pessoaFisica);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return pessoaFisicaList;
-    }
+	    List<PessoaFisica> pessoaFisicaList = new ArrayList<>();
+	    try (Connection connection = criarBanco.getConnection()) {
+	        String selectDataSQL = "SELECT * FROM pessoa_fisica";
+	        try (PreparedStatement preparedStatement = connection.prepareStatement(selectDataSQL);
+	             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+	            while (resultSet.next()) {
+	                int id = resultSet.getInt("id");
+	                String nome = resultSet.getString("nome");
+	                String cpf = resultSet.getString("cpf");
+
+	                PessoaFisica pessoaFisica = new PessoaFisica(id, nome, cpf);
+	                pessoaFisicaList.add(pessoaFisica);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return pessoaFisicaList;
+	}
 	
 	public List<PessoaJuridica> readPessoaJuridica() {
 	    List<PessoaJuridica> pessoaJuridicaList = new ArrayList<>();
-	    try {
+	    try (Connection connection = criarBanco.getConnection()) {
 	        String selectDataSQL = "SELECT * FROM pessoa_juridica";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(selectDataSQL);
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        
-	        while (resultSet.next()) {
-	            int id = resultSet.getInt("id");
-	            String nome = resultSet.getString("nome");
-	            String cnpj = resultSet.getString("cnpj");
-	            
-	            PessoaJuridica pessoaJuridica = new PessoaJuridica(id, nome, cnpj);
-	            pessoaJuridicaList.add(pessoaJuridica);
+	        try (PreparedStatement preparedStatement = connection.prepareStatement(selectDataSQL);
+	             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+	            while (resultSet.next()) {
+	                int id = resultSet.getInt("id");
+	                String nome = resultSet.getString("nome");
+	                String cnpj = resultSet.getString("cnpj");
+
+	                PessoaJuridica pessoaJuridica = new PessoaJuridica(id, nome, cnpj);
+	                pessoaJuridicaList.add(pessoaJuridica);
+	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -228,66 +239,68 @@ public class BancoController {
 
 	public List<Pedido> readPedido() {
 	    List<Pedido> pedidoList = new ArrayList<>();
-	    try {
-	        String selectDataSQL = "SELECT * FROM pedido";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(selectDataSQL);
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        
+	    try (Connection connection = criarBanco.getConnection();
+	         PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM pedido");
+	         ResultSet resultSet = preparedStatement.executeQuery()) {
+
 	        while (resultSet.next()) {
 	            int id = resultSet.getInt("id");
-	            int id_produto = resultSet.getInt("id_produto");
+	            String codigo_produto = resultSet.getString("codigo_produto");
 	            String documento_pessoa = resultSet.getString("documento_pessoa");
 	            int quantidade_produto = resultSet.getInt("quantidade_produto");
 	            Float valor_total = resultSet.getFloat("valor_total");
-	            
-	            Pedido pedido = new Pedido(id, id_produto, documento_pessoa, quantidade_produto, valor_total);
+
+	            Pedido pedido = new Pedido(id, codigo_produto, documento_pessoa, quantidade_produto, valor_total);
 	            pedidoList.add(pedido);
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
+	        // Ou lançar uma exceção personalizada ou adicionar uma mensagem de log
 	    }
 	    return pedidoList;
 	}
 
 	public List<Produto> readProduto() {
 	    List<Produto> produtoList = new ArrayList<>();
-	    try {
+	    try (Connection connection = criarBanco.getConnection()) {
 	        String selectDataSQL = "SELECT * FROM produto";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(selectDataSQL);
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        
-	        while (resultSet.next()) {
-	            int id = resultSet.getInt("id");
-	            String nome = resultSet.getString("nome");
-	            String codigo = resultSet.getString("codigo");
-	            int quantidade = resultSet.getInt("quantidade");
-	            Float preco = resultSet.getFloat("preco");
-	            
-	            Produto produto = new Produto(id, nome, codigo, quantidade, preco);
-	            produtoList.add(produto);
+	        try (PreparedStatement preparedStatement = connection.prepareStatement(selectDataSQL);
+	             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+	            while (resultSet.next()) {
+	                int id = resultSet.getInt("id");
+	                String nome = resultSet.getString("nome");
+	                String codigo = resultSet.getString("codigo");
+	                int quantidade = resultSet.getInt("quantidade");
+	                Float preco = resultSet.getFloat("preco");
+
+	                Produto produto = new Produto(id, nome, codigo, quantidade, preco);
+	                produtoList.add(produto);
+	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
 	    return produtoList;
 	}
-	
+
 	protected Produto getProduto(int idPassado) {
-	    try {
+	    try (Connection connection = criarBanco.getConnection()) {
 	        String selectDataSQL = "SELECT * FROM produto WHERE id = ?";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(selectDataSQL);
-	        preparedStatement.setInt(1, idPassado);
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        
-	        while (resultSet.next()) {
-	            int id = resultSet.getInt("id");
-	            String nome = resultSet.getString("nome");
-	            String codigo = resultSet.getString("codigo");
-	            int quantidade = resultSet.getInt("quantidade");
-	            Float preco = resultSet.getFloat("preco");
-	            
-	            Produto produto = new Produto(id, nome, codigo, quantidade, preco);
-	            return produto;
+	        try (PreparedStatement preparedStatement = connection.prepareStatement(selectDataSQL)) {
+	            preparedStatement.setInt(1, idPassado);
+	            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	                while (resultSet.next()) {
+	                    int id = resultSet.getInt("id");
+	                    String nome = resultSet.getString("nome");
+	                    String codigo = resultSet.getString("codigo");
+	                    int quantidade = resultSet.getInt("quantidade");
+	                    Float preco = resultSet.getFloat("preco");
+
+	                    Produto produto = new Produto(id, nome, codigo, quantidade, preco);
+	                    return produto;
+	                }
+	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -296,21 +309,22 @@ public class BancoController {
 	}
 
 	protected Produto getProduto(String codigoPassado) {
-	    try {
+	    try (Connection connection = criarBanco.getConnection()) {
 	        String selectDataSQL = "SELECT * FROM produto WHERE codigo = ?";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(selectDataSQL);
-	        preparedStatement.setString(1, codigoPassado);
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        
-	        while (resultSet.next()) {
-	            int id = resultSet.getInt("id");
-	            String nome = resultSet.getString("nome");
-	            String codigo = resultSet.getString("codigo");
-	            int quantidade = resultSet.getInt("quantidade");
-	            Float preco = resultSet.getFloat("preco");
-	            
-	            Produto produto = new Produto(id, nome, codigo, quantidade, preco);
-	            return produto;
+	        try (PreparedStatement preparedStatement = connection.prepareStatement(selectDataSQL)) {
+	            preparedStatement.setString(1, codigoPassado);
+	            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	                while (resultSet.next()) {
+	                    int id = resultSet.getInt("id");
+	                    String nome = resultSet.getString("nome");
+	                    String codigo = resultSet.getString("codigo");
+	                    int quantidade = resultSet.getInt("quantidade");
+	                    Float preco = resultSet.getFloat("preco");
+
+	                    Produto produto = new Produto(id, nome, codigo, quantidade, preco);
+	                    return produto;
+	                }
+	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -320,15 +334,16 @@ public class BancoController {
 	
 	//MÉTODOS PARA VERIFICAR SE VALOR JA EXISTE NO BANCO DE DADOS
 	protected boolean cpfExiste(String cpf) {
-	    try {
+	    try (Connection connection = criarBanco.getConnection()) {
 	        String checkCPFSQL = "SELECT COUNT(*) FROM pessoa_fisica WHERE cpf = ?";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(checkCPFSQL);
-	        preparedStatement.setString(1, cpf);
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        
-	        if (resultSet.next()) {
-	            int count = resultSet.getInt(1);
-	            return count > 0;
+	        try (PreparedStatement preparedStatement = connection.prepareStatement(checkCPFSQL)) {
+	            preparedStatement.setString(1, cpf);
+	            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	                if (resultSet.next()) {
+	                    int count = resultSet.getInt(1);
+	                    return count > 0;
+	                }
+	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -337,15 +352,16 @@ public class BancoController {
 	}
 
 	protected boolean cnpjExiste(String cnpj) {
-	    try {
+	    try (Connection connection = criarBanco.getConnection()) {
 	        String checkCNPJSQL = "SELECT COUNT(*) FROM pessoa_juridica WHERE cnpj = ?";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(checkCNPJSQL);
-	        preparedStatement.setString(1, cnpj);
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        
-	        if (resultSet.next()) {
-	            int count = resultSet.getInt(1);
-	            return count > 0;
+	        try (PreparedStatement preparedStatement = connection.prepareStatement(checkCNPJSQL)) {
+	            preparedStatement.setString(1, cnpj);
+	            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	                if (resultSet.next()) {
+	                    int count = resultSet.getInt(1);
+	                    return count > 0;
+	                }
+	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -354,15 +370,16 @@ public class BancoController {
 	}
 
 	protected boolean codigoExiste(String codigo) {
-	    try {
+	    try (Connection connection = criarBanco.getConnection()) {
 	        String checkCodigoSQL = "SELECT COUNT(*) FROM produto WHERE codigo = ?";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(checkCodigoSQL);
-	        preparedStatement.setString(1, codigo);
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        
-	        if (resultSet.next()) {
-	            int count = resultSet.getInt(1);
-	            return count > 0;
+	        try (PreparedStatement preparedStatement = connection.prepareStatement(checkCodigoSQL)) {
+	            preparedStatement.setString(1, codigo);
+	            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	                if (resultSet.next()) {
+	                    int count = resultSet.getInt(1);
+	                    return count > 0;
+	                }
+	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -371,15 +388,16 @@ public class BancoController {
 	}
 
 	protected boolean produtoExiste(int id) {
-	    try {
+	    try (Connection connection = criarBanco.getConnection()) {
 	        String checkCodigoSQL = "SELECT COUNT(*) FROM produto WHERE id = ?";
-	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(checkCodigoSQL);
-	        preparedStatement.setInt(1, id);
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        
-	        if (resultSet.next()) {
-	            int count = resultSet.getInt(1);
-	            return count > 0;
+	        try (PreparedStatement preparedStatement = connection.prepareStatement(checkCodigoSQL)) {
+	            preparedStatement.setInt(1, id);
+	            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	                if (resultSet.next()) {
+	                    int count = resultSet.getInt(1);
+	                    return count > 0;
+	                }
+	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();

@@ -32,8 +32,8 @@ public class ProdutoController {
 		bancoController.updateQuantidadeProduto(produto.getId(),(produto.getQuantidade() - quantidade));
 	}
 	
-	public void atualizarQuantidade(int idProduto, int quantidade) {
-		Produto produto = bancoController.getProduto(idProduto);
+	public void atualizarQuantidade(String codigoProduto, int quantidade) {
+		Produto produto = bancoController.getProduto(codigoProduto);
 		
 		bancoController.updateQuantidadeProduto(produto.getId(),(produto.getQuantidade() + quantidade));
 	}

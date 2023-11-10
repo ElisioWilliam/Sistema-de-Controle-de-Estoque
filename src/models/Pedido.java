@@ -2,21 +2,21 @@ package models;
 
 public class Pedido {
 	private int id;
-    private int id_produto;
+    private String codigo_produto;
     private String documento_pessoa;
     private int quantidade_produto;
     private float valor_total;
    
-	public Pedido(int id, int id_produto , String documento_pessoa, int quantidade_produto, float valor_total) {
+	public Pedido(int id, String codigo_produto , String documento_pessoa, int quantidade_produto, float valor_total) {
 	   this.id = id;
-	   this.id_produto = id_produto;
+	   this.codigo_produto = codigo_produto;
 	   this.documento_pessoa = documento_pessoa;
 	   this.quantidade_produto = quantidade_produto;
 	   this.valor_total = valor_total;
 	}
 	
-	public Pedido(int id_produto , String documento_pessoa, int quantidade_produto, float valor_total) {
-		   this.id_produto = id_produto;
+	public Pedido(String codigo_produto , String documento_pessoa, int quantidade_produto, float valor_total) {
+		   this.codigo_produto = codigo_produto;
 		   this.documento_pessoa = documento_pessoa;
 		   this.quantidade_produto = quantidade_produto;
 		   this.valor_total = valor_total;
@@ -30,12 +30,12 @@ public class Pedido {
 	   this.id= id;
 	}
 		
-	public int getIdProduto(){
-	   return id_produto;
+	public String getCodigoProduto(){
+	   return codigo_produto;
 	}
 	
-	public void setIdProduto(int id_produto){
-	   this.id_produto = id_produto;
+	public void setCodigoProduto(String codigo_produto){
+	   this.codigo_produto = codigo_produto;
 	}
 	
 	public String getDocumentoPessoa(){

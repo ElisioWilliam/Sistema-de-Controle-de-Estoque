@@ -12,13 +12,13 @@ public class PessoaJuridicaController {
 		bancoController = new BancoController();
 	}
 	
-	public void cadastrarPessoaFisica(PessoaJuridica pessoaJuridica) {
+	public void cadastrarPessoaJuridica(PessoaJuridica pessoaJuridica) {
 		String mensagem = "";
 		pessoaJuridica.setCnpj(pessoaJuridica.getCnpj().replaceAll("[^0-9]", ""));
 		
 		if(pessoaJuridica.getNomeCliente() != "" && verificarCNPJ(pessoaJuridica.getCnpj())) {
 			if(!bancoController.cnpjExiste(pessoaJuridica.getCnpj())) {
-				bancoController.createPessoaFisica(pessoaJuridica.getNomeCliente(), pessoaJuridica.getCnpj());
+				bancoController.createPessoaJuridica(pessoaJuridica.getNomeCliente(), pessoaJuridica.getCnpj());
 				mensagem = "Pessoa Juridica cadastrada com sucesso!";
 				JOptionPane.showMessageDialog(null, mensagem);
 			}else {

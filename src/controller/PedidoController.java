@@ -18,28 +18,43 @@ public class PedidoController {
 		boolean cnpjExiste = bancoController.cnpjExiste(documento);
 		boolean produtoExiste = bancoController.produtoExiste(produto.getId());
 		
-		if((cpfExiste || cnpjExiste) && produtoExiste && produto.getQuantidade()>= quantidade && quantidade > 0) {
-			
-			Pedido pedido = new Pedido(produto.getCodigo(), documento, quantidade, (float) quantidade * produto.getPreco());
-			
-			bancoController.createPedido(pedido.getCodigoProduto(), pedido.getDocumentoPessoa(), pedido.getQuantidadeProduto(), pedido.getValorTotal());
-			
-			ProdutoController produtoController = new ProdutoController();
-			produtoController.atualizarQuantidade(produto, quantidade);
-			
-			mensagem = "Pedido realizado com sucesso!";
-			JOptionPane.showMessageDialog(null, mensagem);
+		if(produtoExiste) {
+			if(cpfExiste || cnpjExiste) {
+				if(produto.getQuantidade()>= quantidade && quantidade > 0) {
+					Pedido pedido = new Pedido(produto.getCodigo(), documento, quantidade, (float) quantidade * produto.getPreco());
+					
+					bancoController.createPedido(pedido.getCodigoProduto(), pedido.getDocumentoPessoa(), pedido.getQuantidadeProduto(), pedido.getValorTotal());
+					
+					ProdutoController produtoController = new ProdutoController();
+					produtoController.atualizarQuantidade(produto, quantidade);
+					
+					mensagem = "Pedido realizado com sucesso!";
+					JOptionPane.showMessageDialog(null, mensagem);
+				}else {
+					mensagem = "Quantidade invalida";
+					JOptionPane.showMessageDialog(null, mensagem);
+				}			
+			}else {
+				mensagem = "Documento não existe";
+				JOptionPane.showMessageDialog(null, mensagem);
+			}
 		}else {
-			mensagem = "Dados inseridos incorretamente";
+			mensagem = "Produto não existe";
 			JOptionPane.showMessageDialog(null, mensagem);
 		}
 	}
 	
 	public void cadastrarPedido(String documento, String codigo, int quantidade) {
-		Produto produto = bancoController.getProduto(codigo);
-		System.out.println(produto.getCodigo());
+		boolean produtoExiste = bancoController.produtoExiste(codigo);
 		
-		cadastrarPedido(documento, produto, quantidade);
+		if(produtoExiste) {
+			Produto produto = bancoController.getProduto(codigo);
+			
+			cadastrarPedido(documento, produto, quantidade);
+		}else {
+			String mensagem = "Produto não existe";
+			JOptionPane.showMessageDialog(null, mensagem);
+		}		
 	}
 	
 	public void atualizarPedido(int id, String documento, Produto produto, int quantidade) {
@@ -47,7 +62,6 @@ public class PedidoController {
 		
 		boolean cpfExiste = bancoController.cpfExiste(documento);
 		boolean cnpjExiste = bancoController.cnpjExiste(documento);
-		boolean produtoExiste = bancoController.produtoExiste(produto.getId());
 		boolean pedidoExiste = bancoController.pedidoExiste(id);
 		
 		if(pedidoExiste) {
@@ -66,7 +80,7 @@ public class PedidoController {
 					mensagem = "Pedido atualizado com sucesso!";
 					JOptionPane.showMessageDialog(null, mensagem);
 				}else {
-					mensagem = "Dados inseridos incorretamente";
+					mensagem = "Documento não existe";
 					JOptionPane.showMessageDialog(null, mensagem);
 				}
 			}else {
@@ -80,9 +94,16 @@ public class PedidoController {
 	}
 	
 	public void atualizarPedido(int id, String documento, String codigo, int quantidade) {
-		Produto produto = bancoController.getProduto(codigo);
-	
-		atualizarPedido(id, documento, produto, quantidade);
+		boolean produtoExiste = bancoController.produtoExiste(codigo);
+		
+		if(produtoExiste) {
+			Produto produto = bancoController.getProduto(codigo);
+			
+			atualizarPedido(id, documento, produto, quantidade);
+		}else {
+			String mensagem = "Produto não existe";
+			JOptionPane.showMessageDialog(null, mensagem);
+		}
 	}
 	
 	public void cancelarPedido(int id) {

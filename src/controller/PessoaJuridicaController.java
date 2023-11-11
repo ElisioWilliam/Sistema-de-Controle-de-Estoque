@@ -1,6 +1,5 @@
 package controller;
 
-import controller.BancoController;
 import models.PessoaJuridica;
 import javax.swing.JOptionPane;
 
@@ -16,17 +15,22 @@ public class PessoaJuridicaController {
 		String mensagem = "";
 		pessoaJuridica.setCnpj(pessoaJuridica.getCnpj().replaceAll("[^0-9]", ""));
 		
-		if(pessoaJuridica.getNomeCliente() != "" && verificarCNPJ(pessoaJuridica.getCnpj())) {
-			if(!bancoController.cnpjExiste(pessoaJuridica.getCnpj())) {
-				bancoController.createPessoaJuridica(pessoaJuridica.getNomeCliente(), pessoaJuridica.getCnpj());
-				mensagem = "Pessoa Juridica cadastrada com sucesso!";
-				JOptionPane.showMessageDialog(null, mensagem);
+		if(!pessoaJuridica.getNomeCliente().isEmpty()) {
+			if(verificarCNPJ(pessoaJuridica.getCnpj())) {
+				if(!bancoController.cnpjExiste(pessoaJuridica.getCnpj())) {
+					bancoController.createPessoaJuridica(pessoaJuridica.getNomeCliente(), pessoaJuridica.getCnpj());
+					mensagem = "Pessoa Juridica cadastrada com sucesso!";
+					JOptionPane.showMessageDialog(null, mensagem);
+				}else {
+					mensagem = "CNPJ indisponível!";
+					JOptionPane.showMessageDialog(null, mensagem);
+				}
 			}else {
-				mensagem = "CNPJ indisponível!";
+				mensagem = "CNPJ invalido";
 				JOptionPane.showMessageDialog(null, mensagem);
-			}
+			}			
 		}else {
-			mensagem = "Dados inseridos incorretamente";
+			mensagem = "Preencha todos os campos";
 			JOptionPane.showMessageDialog(null, mensagem);
 		}
 	}
@@ -35,17 +39,22 @@ public class PessoaJuridicaController {
 		String mensagem = "";
 		pessoaJuridica.setCnpj(pessoaJuridica.getCnpj().replaceAll("[^0-9]", ""));
 		
-		if(pessoaJuridica.getNomeCliente() != "" && verificarCNPJ(pessoaJuridica.getCnpj())) {
-			if(bancoController.cnpjExiste(pessoaJuridica.getCnpj())) {
-				bancoController.updatePessoaJuridica(pessoaJuridica.getNomeCliente(), pessoaJuridica.getCnpj());
-				mensagem = "Pessoa Juridica atualizada com sucesso!";
-				JOptionPane.showMessageDialog(null, mensagem);
+		if(!pessoaJuridica.getNomeCliente().isEmpty()) {
+			if(verificarCNPJ(pessoaJuridica.getCnpj())) {
+				if(bancoController.cnpjExiste(pessoaJuridica.getCnpj())) {
+					bancoController.updatePessoaJuridica(pessoaJuridica.getNomeCliente(), pessoaJuridica.getCnpj());
+					mensagem = "Pessoa Juridica atualizada com sucesso!";
+					JOptionPane.showMessageDialog(null, mensagem);
+				}else {
+					mensagem = "CNPJ indisponível!";
+					JOptionPane.showMessageDialog(null, mensagem);
+				}
 			}else {
-				mensagem = "CNPJ indisponível!";
+				mensagem = "CNPJ invalido";
 				JOptionPane.showMessageDialog(null, mensagem);
 			}
 		}else {
-			mensagem = "Dados inseridos incorretamente";
+			mensagem = "Preencha todos os campos";
 			JOptionPane.showMessageDialog(null, mensagem);
 		}
 	}
@@ -63,7 +72,7 @@ public class PessoaJuridicaController {
 				JOptionPane.showMessageDialog(null, mensagem);
 			}
 		}else {
-			mensagem = "Dados inseridos incorretamente";
+			mensagem = "CNPJ invalido";
 			JOptionPane.showMessageDialog(null, mensagem);
 		}
 	}

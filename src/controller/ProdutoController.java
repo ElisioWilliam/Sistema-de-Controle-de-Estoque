@@ -12,34 +12,44 @@ public class ProdutoController {
 	
 	public void cadastrarProduto(Produto produto) {
 		String mensagem = "";
-		if(produto.getCodigo() != null && produto.getNome() != null && produto.getPreco()> 0 && produto.getQuantidade() > 0) {
-			if(!bancoController.codigoExiste(produto.getCodigo())) {
-				bancoController.createProduto(produto.getNome(), produto.getCodigo(), produto.getQuantidade(), produto.getPreco());
-				mensagem = "Produto cadastrado com sucesso!";
-				JOptionPane.showMessageDialog(null, mensagem);
+		if(produto.getPreco() > 0) {
+			if(produto.getQuantidade() > 0) {
+				if(!bancoController.codigoExiste(produto.getCodigo())) {
+					bancoController.createProduto(produto.getNome(), produto.getCodigo(), produto.getQuantidade(), produto.getPreco());
+					mensagem = "Produto cadastrado com sucesso!";
+					JOptionPane.showMessageDialog(null, mensagem);
+				}else {
+					mensagem = "Código indisponível!";
+					JOptionPane.showMessageDialog(null, mensagem);
+				}
 			}else {
-				mensagem = "Código indisponível!";
+				mensagem = "Quantidade invalida";
 				JOptionPane.showMessageDialog(null, mensagem);
 			}
 		}else {
-			mensagem = "Dados inseridos incorretamente";
+			mensagem = "Preço invalido";
 			JOptionPane.showMessageDialog(null, mensagem);
 		}
 	}
 	
 	public void atualizarProduto(Produto produto) {
 		String mensagem = "";
-		if(produto.getCodigo() != null && produto.getNome() != null && produto.getPreco()> 0 && produto.getQuantidade() > 0) {
-			if(bancoController.codigoExiste(produto.getCodigo())) {
-				bancoController.updateProduto(produto.getNome(), produto.getCodigo(), produto.getQuantidade(), produto.getPreco());
-				mensagem = "Produto atualizado com sucesso!";
-				JOptionPane.showMessageDialog(null, mensagem);
+		if(produto.getPreco()> 0) {
+			if(produto.getQuantidade() > 0) {
+				if(bancoController.codigoExiste(produto.getCodigo())) {
+					bancoController.updateProduto(produto.getNome(), produto.getCodigo(), produto.getQuantidade(), produto.getPreco());
+					mensagem = "Produto atualizado com sucesso!";
+					JOptionPane.showMessageDialog(null, mensagem);
+				}else {
+					mensagem = "Código indisponível!";
+					JOptionPane.showMessageDialog(null, mensagem);
+				}
 			}else {
-				mensagem = "Código indisponível!";
+				mensagem = "Quantidade invalido";
 				JOptionPane.showMessageDialog(null, mensagem);
 			}
 		}else {
-			mensagem = "Dados inseridos incorretamente";
+			mensagem = "Preço invalido";
 			JOptionPane.showMessageDialog(null, mensagem);
 		}
 	}
@@ -62,9 +72,16 @@ public class ProdutoController {
 	}
 	
 	public void atualizarQuantidade(String codigoProduto, int quantidade) {
-		Produto produto = bancoController.getProduto(codigoProduto);
+		boolean produtoExiste = bancoController.produtoExiste(codigoProduto);
 		
-		bancoController.updateQuantidadeProduto(produto.getId(),(produto.getQuantidade() + quantidade));
+		if(produtoExiste) {
+			Produto produto = bancoController.getProduto(codigoProduto);
+			
+			bancoController.updateQuantidadeProduto(produto.getId(),(produto.getQuantidade() + quantidade));
+		}else {
+			String mensagem = "Produto não existe";
+			JOptionPane.showMessageDialog(null, mensagem);
+		}
 	}
 	
 	public void definirQuantidade(Produto produto, int quantidade) {

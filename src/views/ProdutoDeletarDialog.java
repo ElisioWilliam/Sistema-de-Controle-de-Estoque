@@ -5,21 +5,15 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import controller.PessoaFisicaController;
-import controller.PessoaJuridicaController;
 import controller.ProdutoController;
-import models.PessoaFisica;
-import models.PessoaJuridica;
 
 public class ProdutoDeletarDialog extends JDialog {
 
     private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
-    private JTextField textFieldLabel1;
     private JTextField textFieldLabel2;
 
     public ProdutoDeletarDialog() {

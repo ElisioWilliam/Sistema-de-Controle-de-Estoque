@@ -1,7 +1,6 @@
 package controller;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -413,6 +412,24 @@ public class BancoController {
 	        String checkCodigoSQL = "SELECT COUNT(*) FROM produto WHERE id = ?";
 	        try (PreparedStatement preparedStatement = connection.prepareStatement(checkCodigoSQL)) {
 	            preparedStatement.setInt(1, id);
+	            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	                if (resultSet.next()) {
+	                    int count = resultSet.getInt(1);
+	                    return count > 0;
+	                }
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
+	
+	protected boolean produtoExiste(String codigo) {
+	    try (Connection connection = criarBanco.getConnection()) {
+	        String checkCodigoSQL = "SELECT COUNT(*) FROM produto WHERE codigo = ?";
+	        try (PreparedStatement preparedStatement = connection.prepareStatement(checkCodigoSQL)) {
+	            preparedStatement.setString(1, codigo);
 	            try (ResultSet resultSet = preparedStatement.executeQuery()) {
 	                if (resultSet.next()) {
 	                    int count = resultSet.getInt(1);

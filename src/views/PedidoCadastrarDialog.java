@@ -11,10 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import controller.PedidoController;
-import controller.PessoaFisicaController;
-import controller.PessoaJuridicaController;
-import models.PessoaFisica;
-import models.PessoaJuridica;
 
 public class PedidoCadastrarDialog extends JDialog {
 

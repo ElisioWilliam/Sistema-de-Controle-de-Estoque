@@ -155,11 +155,11 @@ public class BancoController {
 	    }
 	}
 
-	protected void deletePessoaJuridica(String cpf) {
+	protected void deletePessoaJuridica(String cnpj) {
 	    try {
-	        String deleteDataSQL = "DELETE FROM pessoa_juridica WHERE cpf = ?";
+	        String deleteDataSQL = "DELETE FROM pessoa_juridica WHERE cnpj = ?";
 	        PreparedStatement preparedStatement = criarBanco.getConnection().prepareStatement(deleteDataSQL);
-	        preparedStatement.setString(1, cpf);
+	        preparedStatement.setString(1, cnpj);
 	        preparedStatement.executeUpdate();
 	    } catch (SQLException e) {
 	        e.printStackTrace();

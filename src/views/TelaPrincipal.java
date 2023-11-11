@@ -30,7 +30,18 @@ public class TelaPrincipal extends JFrame {
         add(tabbedPane);
 
     }
+    
+    public void reiniciar() {
+        // Implemente aqui a lógica para reiniciar os componentes da tela
 
+        // Por exemplo, você pode fechar a tela atual
+        dispose();
+
+        // E então criar uma nova instância da TelaPrincipal
+        TelaPrincipal novaTela = new TelaPrincipal();
+        novaTela.setVisible(true);
+    }
+    
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {

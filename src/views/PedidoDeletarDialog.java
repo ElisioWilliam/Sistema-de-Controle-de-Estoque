@@ -10,20 +10,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-
 import controller.PedidoController;
-import controller.PessoaFisicaController;
-import controller.PessoaJuridicaController;
-import controller.ProdutoController;
-import models.PessoaFisica;
-import models.PessoaJuridica;
-import models.Produto;
 
 public class PedidoDeletarDialog extends JDialog {
 
     private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
-    private JTextField textFieldLabel1, textFieldLabel2, textFieldLabel3, textFieldLabel4;
+    private JTextField textFieldLabel1;
 
     public PedidoDeletarDialog() {
         setBounds(100, 100, 450, 300);

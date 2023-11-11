@@ -10,11 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import controller.PessoaFisicaController;
-import controller.PessoaJuridicaController;
 import controller.ProdutoController;
-import models.PessoaFisica;
-import models.PessoaJuridica;
 import models.Produto;
 
 public class ProdutoAtualizarDialog extends JDialog {

@@ -9,7 +9,11 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class ProdutoListPanel extends JPanel {
-    private JList<JPanel> produtoList;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JList<JPanel> produtoList;
 
     public ProdutoListPanel() {
         carregarDadosProdutos();
@@ -17,9 +21,13 @@ public class ProdutoListPanel extends JPanel {
 
     private void carregarDadosProdutos() {
         BancoController controller = new BancoController();
+        
         List<Produto> produtosList = controller.readProduto();
-
+        
+        JPanel panelHeader = criarHeaderPainelProduto();
         DefaultListModel<JPanel> listModel = new DefaultListModel<>();
+        listModel.addElement(panelHeader);
+        
         for (Produto produto : produtosList) {
             JPanel panel = criarPainelProduto(produto);
             listModel.addElement(panel);
@@ -67,7 +75,6 @@ public class ProdutoListPanel extends JPanel {
     private JPanel criarPainelProduto(Produto produto) {
         JPanel panel = new JPanel(new GridLayout(1, 5));
 
-        String id = String.valueOf(produto.getId());
         String quantidade = String.valueOf(produto.getQuantidade());
         String preco = String.valueOf(produto.getPreco());
 
@@ -75,6 +82,22 @@ public class ProdutoListPanel extends JPanel {
         JLabel codigoLabel = new JLabel(produto.getCodigo());
         JLabel precoLabel = new JLabel(preco);
         JLabel quantidadeLabel = new JLabel(quantidade);
+
+        panel.add(codigoLabel);
+        panel.add(nomeLabel);
+        panel.add(precoLabel);
+        panel.add(quantidadeLabel);
+
+        return panel;
+    }
+    
+    private JPanel criarHeaderPainelProduto() {
+        JPanel panel = new JPanel(new GridLayout(1, 5));
+
+        JLabel nomeLabel = new JLabel("Nome");
+        JLabel codigoLabel = new JLabel("Codigo");
+        JLabel precoLabel = new JLabel("Preco");
+        JLabel quantidadeLabel = new JLabel("Quantidade");
 
         panel.add(codigoLabel);
         panel.add(nomeLabel);

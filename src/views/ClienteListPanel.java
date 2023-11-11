@@ -11,6 +11,10 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class ClienteListPanel extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JList<JPanel> clienteList;
 	
     public ClienteListPanel() {
@@ -23,6 +27,9 @@ public class ClienteListPanel extends JPanel {
         List<PessoaJuridica> pessoaJuridicaList = controller.readPessoaJuridica();
         
         DefaultListModel<JPanel> listModel = new DefaultListModel<>();
+        JPanel panelHeader = criarHeaderPainelCliente();
+        listModel.addElement(panelHeader);
+        
         for (PessoaFisica pessoa : pessoaFisicaList) {
             JPanel panel = criarPainelCliente(pessoa.getCpf(), pessoa.getNomeCliente(), "Fisica");
             listModel.addElement(panel);
@@ -78,6 +85,19 @@ public class ClienteListPanel extends JPanel {
         JLabel infoLabel = new JLabel(info);
         JLabel nomeLabel = new JLabel(nome);
         JLabel categoriaLabel = new JLabel(categoria);
+        
+        panel.add(infoLabel);
+        panel.add(nomeLabel);
+        panel.add(categoriaLabel);
+        
+        return panel;
+    }
+    
+    private JPanel criarHeaderPainelCliente() {
+        JPanel panel = new JPanel(new GridLayout(1, 3));
+        JLabel infoLabel = new JLabel("Documento");
+        JLabel nomeLabel = new JLabel("Nome");
+        JLabel categoriaLabel = new JLabel("Categoria");
         
         panel.add(infoLabel);
         panel.add(nomeLabel);

@@ -9,7 +9,11 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class PedidoListPanel extends JPanel {
-    private JList<JPanel> pedidoJList;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JList<JPanel> pedidoJList;
 
     public PedidoListPanel() {
         carregarDadosPedidos();
@@ -20,6 +24,9 @@ public class PedidoListPanel extends JPanel {
         List<Pedido> pedidoList = controller.readPedido();
 
         DefaultListModel<JPanel> listModel = new DefaultListModel<>();
+        JPanel panelHeader = criarHeaderPainelPedido();
+        listModel.addElement(panelHeader);
+        
         for (Pedido pedido : pedidoList) {
             JPanel panel = criarPainelPedido(pedido);
             listModel.addElement(panel);
@@ -76,6 +83,24 @@ public class PedidoListPanel extends JPanel {
         JLabel documentoLabel = new JLabel(pedido.getDocumentoPessoa());
         JLabel precoLabel = new JLabel(preco);
         JLabel quantidadeLabel = new JLabel(quantidade);
+
+        panel.add(idLabel);
+        panel.add(codigoLabel);
+        panel.add(documentoLabel);
+        panel.add(precoLabel);
+        panel.add(quantidadeLabel);
+
+        return panel;
+    }
+    
+    private JPanel criarHeaderPainelPedido() {
+        JPanel panel = new JPanel(new GridLayout(1, 6));
+
+        JLabel idLabel = new JLabel("Id");
+        JLabel codigoLabel = new JLabel("Codigo");
+        JLabel documentoLabel = new JLabel("Documento");
+        JLabel precoLabel = new JLabel("Preço");
+        JLabel quantidadeLabel = new JLabel("Quantidade");
 
         panel.add(idLabel);
         panel.add(codigoLabel);

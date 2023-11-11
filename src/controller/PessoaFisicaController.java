@@ -15,17 +15,22 @@ public class PessoaFisicaController {
 		String mensagem = "";
 		pessoaFisica.setCpf(pessoaFisica.getCpf().replaceAll("[^0-9]", ""));
 		
-		if(pessoaFisica.getNomeCliente() != "" && verificarCPF(pessoaFisica.getCpf())) {
-			if(!bancoController.cpfExiste(pessoaFisica.getCpf())) {
-				bancoController.createPessoaFisica(pessoaFisica.getNomeCliente(), pessoaFisica.getCpf());
-				mensagem = "Pessoa Fisica cadastrada com sucesso!";
-				JOptionPane.showMessageDialog(null, mensagem);
+		if(!pessoaFisica.getNomeCliente().isEmpty()) {
+			if(verificarCPF(pessoaFisica.getCpf())) {
+				if(!bancoController.cpfExiste(pessoaFisica.getCpf())) {
+					bancoController.createPessoaFisica(pessoaFisica.getNomeCliente(), pessoaFisica.getCpf());
+					mensagem = "Pessoa Fisica cadastrada com sucesso!";
+					JOptionPane.showMessageDialog(null, mensagem);
+				}else {
+					mensagem = "CPF indisponível!";
+					JOptionPane.showMessageDialog(null, mensagem);
+				}
 			}else {
-				mensagem = "CPF indisponível!";
+				mensagem = "CPF invalido";
 				JOptionPane.showMessageDialog(null, mensagem);
 			}
 		}else {
-			mensagem = "Dados inseridos incorretamente";
+			mensagem = "Preencha todos os campos";
 			JOptionPane.showMessageDialog(null, mensagem);
 		}
 	}
@@ -34,18 +39,23 @@ public class PessoaFisicaController {
 		String mensagem = "";
 		pessoaFisica.setCpf(pessoaFisica.getCpf().replaceAll("[^0-9]", ""));
 		
-		if(pessoaFisica.getNomeCliente() != "" && verificarCPF(pessoaFisica.getCpf())) {
-			if(bancoController.cpfExiste(pessoaFisica.getCpf())) {
-				bancoController.updatePessoaFisica(pessoaFisica.getNomeCliente(), pessoaFisica.getCpf());
-				
-				mensagem = "Pessoa Fisica atualizada com sucesso!";
-				JOptionPane.showMessageDialog(null, mensagem);
+		if(!pessoaFisica.getNomeCliente().isEmpty()) {
+			if(verificarCPF(pessoaFisica.getCpf())) {
+				if(bancoController.cpfExiste(pessoaFisica.getCpf())) {
+					bancoController.updatePessoaFisica(pessoaFisica.getNomeCliente(), pessoaFisica.getCpf());
+					
+					mensagem = "Pessoa Fisica atualizada com sucesso!";
+					JOptionPane.showMessageDialog(null, mensagem);
+				}else {
+					mensagem = "CPF indisponível!";
+					JOptionPane.showMessageDialog(null, mensagem);
+				}
 			}else {
-				mensagem = "CPF indisponível!";
+				mensagem = "CPF invalido";
 				JOptionPane.showMessageDialog(null, mensagem);
 			}
 		}else {
-			mensagem = "Dados inseridos incorretamente";
+			mensagem = "Preencha todos os campos";
 			JOptionPane.showMessageDialog(null, mensagem);
 		}
 	}
@@ -64,7 +74,7 @@ public class PessoaFisicaController {
 				JOptionPane.showMessageDialog(null, mensagem);
 			}
 		}else {
-			mensagem = "Dados inseridos incorretamente";
+			mensagem = "CPF invalido";
 			JOptionPane.showMessageDialog(null, mensagem);
 		}
 	}

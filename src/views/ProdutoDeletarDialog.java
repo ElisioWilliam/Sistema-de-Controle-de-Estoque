@@ -27,7 +27,7 @@ public class ProdutoDeletarDialog extends JDialog {
         getContentPane().add(contentPanel, BorderLayout.CENTER);
 
         // Adicionando rótulo e campo de entrada para o segundo label
-        JLabel label2 = new JLabel("Documento:");
+        JLabel label2 = new JLabel("Código:");
         contentPanel.add(label2);
         textFieldLabel2 = new JTextField();
         textFieldLabel2.setColumns(30);
@@ -64,10 +64,8 @@ public class ProdutoDeletarDialog extends JDialog {
     private void onDeletar() {
         String documento = textFieldLabel2.getText();
         
-        String apenasDigitos = documento.replaceAll("\\D", "");
-        
         ProdutoController produtoController = new ProdutoController();
-        produtoController.deletarProduto(apenasDigitos);
+        produtoController.deletarProduto(documento);
         produtoListPanel.gerarPanelsProdutos();
     }
 }

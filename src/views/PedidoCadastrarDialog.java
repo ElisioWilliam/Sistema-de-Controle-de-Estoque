@@ -98,6 +98,7 @@ public class PedidoCadastrarDialog extends JDialog {
         	PedidoController pedidoController = new PedidoController();
         	pedidoController.cadastrarPedido(apenasDigitos, codigo, quantidade);
         	pedidoListPanel.gerarPanelsPedidos();
+        	TelaPrincipal.produtosPanel.gerarPanelsProdutos();
         } else {
         	mensagem = "Documento inserido incorretamente";
 			JOptionPane.showMessageDialog(null, mensagem);

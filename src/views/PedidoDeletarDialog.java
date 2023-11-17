@@ -78,5 +78,6 @@ public class PedidoDeletarDialog extends JDialog {
         PedidoController pedidoController = new PedidoController();
         pedidoController.cancelarPedido(id);
         pedidoListPanel.gerarPanelsPedidos();
+        TelaPrincipal.produtosPanel.gerarPanelsProdutos();
     }
 }

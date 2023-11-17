@@ -114,6 +114,7 @@ public class PedidoAtualizarDialog extends JDialog {
         	PedidoController pedidoController = new PedidoController();
         	pedidoController.atualizarPedido(id, apenasDigitos, codigo, quantidade);
         	pedidoListPanel.gerarPanelsPedidos();
+        	TelaPrincipal.produtosPanel.gerarPanelsProdutos();
         } else {
         	mensagem = "Documento inserido incorretamente";
 			JOptionPane.showMessageDialog(null, mensagem);

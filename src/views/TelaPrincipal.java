@@ -9,9 +9,9 @@ public class TelaPrincipal extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JTabbedPane tabbedPane;
-    private JPanel produtosPanel;
     private JPanel clientesPanel;
     private JPanel pedidosPanel;
+    public static ProdutoListPanel produtosPanel; 
     
     public TelaPrincipal() {
         setTitle("Gerenciamento de Estoque");

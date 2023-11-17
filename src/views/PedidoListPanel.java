@@ -9,33 +9,21 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class PedidoListPanel extends JPanel {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private JList<JPanel> pedidoJList;
+    private static final long serialVersionUID = 1L;
+    private JList<JPanel> pedidoJList;
+    private DefaultListModel<JPanel> listModel;
 
     public PedidoListPanel() {
+        listModel = new DefaultListModel<>();
         carregarDadosPedidos();
     }
 
     private void carregarDadosPedidos() {
-        BancoController controller = new BancoController();
-        List<Pedido> pedidoList = controller.readPedido();
+        gerarBotoes();
+        gerarPanelsPedidos();
+    }
 
-        DefaultListModel<JPanel> listModel = new DefaultListModel<>();
-        JPanel panelHeader = criarHeaderPainelPedido();
-        listModel.addElement(panelHeader);
-        
-        for (Pedido pedido : pedidoList) {
-            JPanel panel = criarPainelPedido(pedido);
-            listModel.addElement(panel);
-        }
-
-        pedidoJList = new JList<>(listModel);
-        pedidoJList.setCellRenderer(new PanelListCellRenderer());
-        JScrollPane scrollPane = new JScrollPane(pedidoJList);
-
+    private void gerarBotoes() {
         JButton botaoCadastrar = new JButton("CADASTRAR");
         JButton botaoAtualizar = new JButton("ATUALIZAR");
         JButton botaoDeletar = new JButton("DELETAR");
@@ -43,21 +31,21 @@ public class PedidoListPanel extends JPanel {
         botaoCadastrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	new PedidoCadastrarDialog();
+                new PedidoCadastrarDialog(PedidoListPanel.this);
             }
         });
 
         botaoAtualizar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	new PedidoAtualizarDialog();
+                new PedidoAtualizarDialog(PedidoListPanel.this);
             }
         });
 
         botaoDeletar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	new PedidoDeletarDialog();
+                new PedidoDeletarDialog(PedidoListPanel.this);
             }
         });
 
@@ -68,6 +56,26 @@ public class PedidoListPanel extends JPanel {
 
         setLayout(new BorderLayout());
         add(botoesPanel, BorderLayout.NORTH);
+    }
+
+    public void gerarPanelsPedidos() {
+        listModel.removeAllElements();
+
+        BancoController controller = new BancoController();
+        List<Pedido> pedidoList = controller.readPedido();
+
+        JPanel panelHeader = criarHeaderPainelPedido();
+        listModel.addElement(panelHeader);
+
+        for (Pedido pedido : pedidoList) {
+            JPanel panel = criarPainelPedido(pedido);
+            listModel.addElement(panel);
+        }
+
+        pedidoJList = new JList<>(listModel);
+        pedidoJList.setCellRenderer(new PanelListCellRenderer());
+        JScrollPane scrollPane = new JScrollPane(pedidoJList);
+
         add(scrollPane, BorderLayout.CENTER);
     }
 
@@ -92,7 +100,7 @@ public class PedidoListPanel extends JPanel {
 
         return panel;
     }
-    
+
     private JPanel criarHeaderPainelPedido() {
         JPanel panel = new JPanel(new GridLayout(1, 6));
 

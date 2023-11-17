@@ -18,8 +18,11 @@ public class ProdutoAtualizarDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
     private JTextField textFieldLabel1, textFieldLabel2, textFieldLabel3, textFieldLabel4;
+    private ProdutoListPanel produtoListPanel;
 
-    public ProdutoAtualizarDialog() {
+    public ProdutoAtualizarDialog(ProdutoListPanel produtoListPanel) {
+    	this.produtoListPanel = produtoListPanel;
+    	
         setBounds(100, 100, 450, 300);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -122,5 +125,6 @@ public class ProdutoAtualizarDialog extends JDialog {
         Produto produto = new Produto(nome, codigo, quantidade, valor);
         ProdutoController produtoController = new ProdutoController();
         produtoController.atualizarProduto(produto);
+        produtoListPanel.gerarPanelsProdutos();
     }
 }

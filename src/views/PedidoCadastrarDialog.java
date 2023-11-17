@@ -17,8 +17,10 @@ public class PedidoCadastrarDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
     private JTextField textFieldLabel1, textFieldLabel2, textFieldLabel3;
-
-    public PedidoCadastrarDialog() {
+    private PedidoListPanel pedidoListPanel;
+    public PedidoCadastrarDialog(PedidoListPanel pedidoListPanel) {
+    	this.pedidoListPanel = pedidoListPanel;
+    	
         setBounds(100, 100, 450, 300);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -95,6 +97,7 @@ public class PedidoCadastrarDialog extends JDialog {
         if (apenasDigitos.length() == 11 || apenasDigitos.length() == 14) {
         	PedidoController pedidoController = new PedidoController();
         	pedidoController.cadastrarPedido(apenasDigitos, codigo, quantidade);
+        	pedidoListPanel.gerarPanelsPedidos();
         } else {
         	mensagem = "Documento inserido incorretamente";
 			JOptionPane.showMessageDialog(null, mensagem);

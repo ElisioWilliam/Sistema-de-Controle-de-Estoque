@@ -22,8 +22,11 @@ public class ClienteAtualizarDialog extends JDialog {
     private final JPanel contentPanel = new JPanel();
     private JTextField textFieldLabel1;
     private JTextField textFieldLabel2;
-
-    public ClienteAtualizarDialog() {
+    private ClienteListPanel clienteListPanel;
+    
+    public ClienteAtualizarDialog(ClienteListPanel clienteListPanel) {
+    	this.clienteListPanel = clienteListPanel;
+    	
         setBounds(100, 100, 450, 300);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -83,12 +86,13 @@ public class ClienteAtualizarDialog extends JDialog {
         	PessoaFisica pessoa = new PessoaFisica(nome, documento);
         	PessoaFisicaController pessoaFisica = new PessoaFisicaController();
         	pessoaFisica.atualizarPessoaFisica(pessoa);
+        	clienteListPanel.gerarPanelsClientes();
         	
         } else if (apenasDigitos.length() == 14) {
         	PessoaJuridica pessoa = new PessoaJuridica(nome, documento);
         	PessoaJuridicaController pessoaJuridica = new PessoaJuridicaController();
         	pessoaJuridica.atualizarPessoaJuridica(pessoa);
-        	
+        	clienteListPanel.gerarPanelsClientes();
         } else {
         	String mensagem = "Documento inserido incorretamente";
 			JOptionPane.showMessageDialog(null, mensagem);

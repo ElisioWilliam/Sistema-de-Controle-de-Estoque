@@ -16,8 +16,10 @@ public class PedidoAtualizarDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
     private JTextField textFieldLabel1, textFieldLabel2, textFieldLabel3, textFieldLabel4;
-
-    public PedidoAtualizarDialog() {
+    private PedidoListPanel pedidoListPanel;
+    public PedidoAtualizarDialog(PedidoListPanel pedidoListPanel) {
+    	this.pedidoListPanel = pedidoListPanel;
+    	
         setBounds(100, 100, 450, 300);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -64,7 +66,7 @@ public class PedidoAtualizarDialog extends JDialog {
                 JButton atualizarButton = new JButton("Atualizar");
                 atualizarButton.setActionCommand("Atualizar");
                 
-                atualizarButton.addActionListener(e -> onCadastrar());
+                atualizarButton.addActionListener(e -> onAtualizar());
                 buttonPane.add(atualizarButton);
             }
             {
@@ -83,7 +85,7 @@ public class PedidoAtualizarDialog extends JDialog {
         dispose();
     }
     
-    private void onCadastrar() {
+    private void onAtualizar() {
     	String mensagem = "";
         String documento = textFieldLabel1.getText();
         String codigo = textFieldLabel2.getText();
@@ -111,6 +113,7 @@ public class PedidoAtualizarDialog extends JDialog {
         if (apenasDigitos.length() == 11 || apenasDigitos.length() == 14) {
         	PedidoController pedidoController = new PedidoController();
         	pedidoController.atualizarPedido(id, apenasDigitos, codigo, quantidade);
+        	pedidoListPanel.gerarPanelsPedidos();
         } else {
         	mensagem = "Documento inserido incorretamente";
 			JOptionPane.showMessageDialog(null, mensagem);

@@ -17,8 +17,11 @@ public class ProdutoCadastrarDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
     private JTextField textFieldLabel1, textFieldLabel2, textFieldLabel3, textFieldLabel4;
-
-    public ProdutoCadastrarDialog() {
+    private ProdutoListPanel produtoListPanel; 
+    
+    public ProdutoCadastrarDialog(ProdutoListPanel produtoListPanel) {
+    	this.produtoListPanel = produtoListPanel;
+    	
         setBounds(100, 100, 450, 300);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -121,5 +124,6 @@ public class ProdutoCadastrarDialog extends JDialog {
         Produto produto = new Produto(nome, codigo, quantidade, valor);
         ProdutoController produtoController = new ProdutoController();
         produtoController.cadastrarProduto(produto);
+        produtoListPanel.gerarPanelsProdutos();
     }
 }

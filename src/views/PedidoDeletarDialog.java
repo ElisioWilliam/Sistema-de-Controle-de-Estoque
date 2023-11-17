@@ -17,8 +17,11 @@ public class PedidoDeletarDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
     private JTextField textFieldLabel1;
-
-    public PedidoDeletarDialog() {
+    private PedidoListPanel pedidoListPanel;
+    
+    public PedidoDeletarDialog(PedidoListPanel pedidoListPanel) {
+    	this.pedidoListPanel = pedidoListPanel;
+    	
         setBounds(100, 100, 450, 300);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -74,5 +77,6 @@ public class PedidoDeletarDialog extends JDialog {
 
         PedidoController pedidoController = new PedidoController();
         pedidoController.cancelarPedido(id);
+        pedidoListPanel.gerarPanelsPedidos();
     }
 }

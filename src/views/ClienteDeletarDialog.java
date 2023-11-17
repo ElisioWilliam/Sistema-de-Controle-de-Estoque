@@ -18,8 +18,11 @@ public class ClienteDeletarDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
     private JTextField textFieldLabel2;
+    private ClienteListPanel clienteListPanel;
 
-    public ClienteDeletarDialog() {
+    public ClienteDeletarDialog(ClienteListPanel clienteListPanel) {
+    	this.clienteListPanel = clienteListPanel;
+    	
         setBounds(100, 100, 450, 300);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -69,10 +72,12 @@ public class ClienteDeletarDialog extends JDialog {
         if (apenasDigitos.length() == 11) {
         	PessoaFisicaController pessoaFisica = new PessoaFisicaController();
         	pessoaFisica.deletarPessoaFisica(apenasDigitos);
+        	clienteListPanel.gerarPanelsClientes();
         	
         } else if (apenasDigitos.length() == 14) {
         	PessoaJuridicaController pessoaJuridica = new PessoaJuridicaController();
         	pessoaJuridica.deletarPessoaJuridica(apenasDigitos);
+        	clienteListPanel.gerarPanelsClientes();
         	
         } else {
         	String mensagem = "Documento inserido incorretamente";

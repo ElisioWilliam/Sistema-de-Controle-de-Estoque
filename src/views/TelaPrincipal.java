@@ -14,7 +14,7 @@ public class TelaPrincipal extends JFrame {
     private JPanel pedidosPanel;
     
     public TelaPrincipal() {
-        setTitle("Sistema de Gerenciamento");
+        setTitle("Gerenciamento de Estoque");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
 
@@ -29,17 +29,6 @@ public class TelaPrincipal extends JFrame {
 
         add(tabbedPane);
 
-    }
-    
-    public void reiniciar() {
-        // Implemente aqui a lógica para reiniciar os componentes da tela
-
-        // Por exemplo, você pode fechar a tela atual
-        dispose();
-
-        // E então criar uma nova instância da TelaPrincipal
-        TelaPrincipal novaTela = new TelaPrincipal();
-        novaTela.setVisible(true);
     }
     
     public static void main(String[] args) {

@@ -15,8 +15,11 @@ public class ProdutoDeletarDialog extends JDialog {
     private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
     private JTextField textFieldLabel2;
-
-    public ProdutoDeletarDialog() {
+    private ProdutoListPanel produtoListPanel;
+    
+    public ProdutoDeletarDialog(ProdutoListPanel produtoListPanel) {
+    	this.produtoListPanel = produtoListPanel;
+    	
         setBounds(100, 100, 450, 300);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -65,5 +68,6 @@ public class ProdutoDeletarDialog extends JDialog {
         
         ProdutoController produtoController = new ProdutoController();
         produtoController.deletarProduto(apenasDigitos);
+        produtoListPanel.gerarPanelsProdutos();
     }
 }

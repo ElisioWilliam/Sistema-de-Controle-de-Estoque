@@ -22,8 +22,11 @@ public class ClienteCadastrarDialog extends JDialog {
     private final JPanel contentPanel = new JPanel();
     private JTextField textFieldLabel1;
     private JTextField textFieldLabel2;
-
-    public ClienteCadastrarDialog() {
+    private ClienteListPanel clienteListPanel;
+    
+    public ClienteCadastrarDialog(ClienteListPanel clienteListPanel) {
+    	this.clienteListPanel = clienteListPanel;
+    	
         setBounds(100, 100, 450, 300);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -83,11 +86,13 @@ public class ClienteCadastrarDialog extends JDialog {
         	PessoaFisica pessoa = new PessoaFisica(nome, documento);
         	PessoaFisicaController pessoaFisica = new PessoaFisicaController();
         	pessoaFisica.cadastrarPessoaFisica(pessoa);
+        	clienteListPanel.gerarPanelsClientes();
         	
         } else if (apenasDigitos.length() == 14) {
         	PessoaJuridica pessoa = new PessoaJuridica(nome, documento);
         	PessoaJuridicaController pessoaJuridica = new PessoaJuridicaController();
         	pessoaJuridica.cadastrarPessoaJuridica(pessoa);
+        	clienteListPanel.gerarPanelsClientes();
         	
         } else {
         	String mensagem = "Documento inserido incorretamente";

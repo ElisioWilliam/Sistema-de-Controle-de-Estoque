@@ -85,6 +85,14 @@ public class ProdutoController {
 	}
 	
 	public void definirQuantidade(Produto produto, int quantidade) {
-		bancoController.updateQuantidadeProduto(produto.getId(), quantidade);
+		boolean produtoExiste = bancoController.produtoExiste(produto.getCodigo());
+		
+		if(produtoExiste) {			
+			bancoController.updateQuantidadeProduto(produto.getId(), quantidade);
+		}else {
+			String mensagem = "Produto não existe";
+			JOptionPane.showMessageDialog(null, mensagem);
+		}
+		
 	}
 }

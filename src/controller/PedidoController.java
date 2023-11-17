@@ -66,21 +66,25 @@ public class PedidoController {
 		
 		if(pedidoExiste) {
 			Pedido pedidoCadastrado = bancoController.getPedido(id);
-			
-			if(pedidoCadastrado.getQuantidadeProduto() + produto.getQuantidade() - quantidade >= 0) {
-				if((cpfExiste || cnpjExiste)) {
-					
-					Pedido pedido = new Pedido(id, produto.getCodigo(), documento, quantidade, (float) quantidade * produto.getPreco());
-					
-					bancoController.updatePedido(pedido.getId(), pedido.getCodigoProduto(), pedido.getDocumentoPessoa(), pedido.getQuantidadeProduto(), pedido.getValorTotal());
-					
-					ProdutoController produtoController = new ProdutoController();
-					produtoController.definirQuantidade(produto, pedidoCadastrado.getQuantidadeProduto() + produto.getQuantidade() - quantidade);
-					
-					mensagem = "Pedido atualizado com sucesso!";
-					JOptionPane.showMessageDialog(null, mensagem);
+			if(quantidade >= 0) {
+				if(pedidoCadastrado.getQuantidadeProduto() + produto.getQuantidade() - quantidade >= 0) {
+					if((cpfExiste || cnpjExiste)) {
+						
+						Pedido pedido = new Pedido(id, produto.getCodigo(), documento, quantidade, (float) quantidade * produto.getPreco());
+						
+						bancoController.updatePedido(pedido.getId(), pedido.getCodigoProduto(), pedido.getDocumentoPessoa(), pedido.getQuantidadeProduto(), pedido.getValorTotal());
+						
+						ProdutoController produtoController = new ProdutoController();
+						produtoController.definirQuantidade(produto, pedidoCadastrado.getQuantidadeProduto() + produto.getQuantidade() - quantidade);
+						
+						mensagem = "Pedido atualizado com sucesso!";
+						JOptionPane.showMessageDialog(null, mensagem);
+					}else {
+						mensagem = "Documento não existe";
+						JOptionPane.showMessageDialog(null, mensagem);
+					}
 				}else {
-					mensagem = "Documento não existe";
+					mensagem = "Quantidade invalida";
 					JOptionPane.showMessageDialog(null, mensagem);
 				}
 			}else {
@@ -115,14 +119,18 @@ public class PedidoController {
 		if(pedidoExiste) {			
 			Pedido pedido = bancoController.getPedido(id);
 			Produto produto = bancoController.getProduto(pedido.getCodigoProduto());
-			System.out.println(pedido.getCodigoProduto());
-			ProdutoController produtoController = new ProdutoController();
-			produtoController.definirQuantidade(produto, pedido.getQuantidadeProduto() + produto.getQuantidade());
 			
+			if(produto != null) {
+				System.out.println(pedido.getCodigoProduto());
+				ProdutoController produtoController = new ProdutoController();
+				produtoController.definirQuantidade(produto, pedido.getQuantidadeProduto() + produto.getQuantidade());
+				
+			}			
 			bancoController.deletePedido(pedido.getId());
-								
+			
 			mensagem = "Pedido deletado com sucesso!";
 			JOptionPane.showMessageDialog(null, mensagem);
+			
 		}else {
 			mensagem = "Pedido não existe!";
 			JOptionPane.showMessageDialog(null, mensagem);
